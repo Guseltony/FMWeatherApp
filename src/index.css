@@ -77,6 +77,11 @@
   --tracking-none: 0;
 }
 
+
+body {
+  color: var(--color-neutral-0);
+}
+
 .text-preset-1 {
   font-size: var(--text-xxl);
   line-height: var(--leading-normal);
@@ -128,6 +133,7 @@
   line-height: var(--leading-max);
   letter-spacing: var(--tracking-none);
   font-family: var(--font-DMSans);
+  font-weight: 500;
 }
 .text-preset-8 {
   font-size: var(--text-xxs);
