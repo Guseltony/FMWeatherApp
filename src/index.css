@@ -110,13 +110,13 @@ body {
   font-family: var(--font-DMSans);
 }
 
-.text-preset-5-a {
+.text-preset-5a {
   font-size: var(--text-base);
   line-height: var(--leading-max);
   letter-spacing: var(--tracking-none);
   font-family: var(--font-DMSans);
 }
-.text-preset-5-b {
+.text-preset-5b {
   font-size: var(--text-base);
   line-height: var(--leading-max);
   letter-spacing: var(--tracking-none);
