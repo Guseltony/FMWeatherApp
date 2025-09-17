@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+@import "tailwindcss";
+
+
+@theme {
+
+  /* color theme */
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-200: #d4d3d9;
+  --color-neutral-300: #acacb7;
+  --color-neutral-600: #3c3b5e;
+  --color-neutral-700: #302f4a;
+  --color-neutral-800: #262540;
+  --color-neutral-900: #02012c;
+
+  --color-orange: #ff820a;
+  --color-blue-light: #4658d9;
+  --color-blue-dark: #2b1b9c;
+
+  /* font theme */
+  --font-DMSans : "DM Sans", sans-serif;
+  --font-Bricolage: "Bricolage Grotesque", sans-serif;
+
+  /* radius theme */
+  --radius-0: 0;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+  --radius-24: 24px;
+  --radius-full: 999px;
+
+  /* spacing theme */
+
+  --spacing-0: 0;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-112: 112px;
+  --spacing-128: 128px;
+  --spacing-140: 140px;
+
+  /* font-size theme */
+
+  --text-xxl : 96px;
+  --text-xl : 52px;
+  --text-lg : 32px;
+  --text-md : 28px;
+  --text-base : 20px;
+  --text-sm : 18px;
+  --text-xs : 16px;
+  --text-xxs : 14px;
+
+  /* line height theme */
+
+  --leading-max: 120%;
+  --leading-normal: 100%;
+
+  /* letter spacing */
+  --tracking-neg: -2px;
+  --tracking-none: 0;
+}
+
+.text-preset-1 {
+  font-size: var(--text-xxl);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-neg);
+  font-family: var(--font-DMSans);
+}
+
+.text-preset-2 {
+  font-size: var(--text-xl);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-Bricolage);
+}
+
+.text-preset-3 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+
+.text-preset-4 {
+  font-size: var(--text-md);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+
+.text-preset-5-a {
+  font-size: var(--text-base);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+.text-preset-5-b {
+  font-size: var(--text-base);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+.text-preset-6 {
+  font-size: var(--text-sm);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+.text-preset-7 {
+  font-size: var(--text-xs);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
+.text-preset-8 {
+  font-size: var(--text-xxs);
+  line-height: var(--leading-max);
+  letter-spacing: var(--tracking-none);
+  font-family: var(--font-DMSans);
+}
