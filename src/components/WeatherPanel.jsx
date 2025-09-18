@@ -1,6 +1,7 @@
 import React from 'react'
 import { Search } from './Search'
-import { WeatherInfo } from '../WeatherInfo'
+import { WeatherInfo } from './WeatherInfo'
+
 
 const WeatherPanel = () => {
   return (
