@@ -4,7 +4,7 @@ import { Units } from './Units'
 
 const Header = () => {
 
-  const [showDropDownUnits, setShowDropDownUnits] = useState(true)
+  const [showDropDownUnits, setShowDropDownUnits] = useState(false)
 
   const [metric, setMetric] = useState(true)
 
