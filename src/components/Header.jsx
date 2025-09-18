@@ -38,8 +38,8 @@ const Header = () => {
 
               <div className='divide-y-[1px] divide-neutral-600'>
                 {
-                  unitsArray.map((u) => (
-                    <Units {...u} metric={metric} setMetric={setMetric} />
+                  unitsArray.map((u, index) => (
+                    <Units key={index} {...u} metric={metric} setMetric={setMetric} />
                   ))
                 }
               </div>
