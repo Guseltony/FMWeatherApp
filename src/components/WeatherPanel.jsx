@@ -5,7 +5,7 @@ import { WeatherInfo } from './WeatherInfo'
 
 const WeatherPanel = () => {
   return (
-    <div className='flex items-center justify-center flex-col gap-32 lg:gap-48'>
+    <div className='flex items-center justify-center flex-col gap-32 xl:gap-48'>
       <Search />
       <WeatherInfo />
     </div>
