@@ -31,7 +31,7 @@ const Header = () => {
         {/* dropdown */}
         {
           showDropDownUnits && 
-            <div className='px-8 py-6 bg-neutral-800 border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-48 flex-col'>
+            <div className='px-8 py-6 bg-neutral-800 border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-48 flex-col z-[30]'>
               <div className='px-8 py-10 rounded-8 hover:bg-neutral-700 select-none cursor-pointer' onClick={() => handleSetMetric()}>
                 <p className='text-preset-7 font-medium text-neutral-0'>{ metric ? 'Switch to Imperial' : 'Switch to Metric'}</p>
               </div>
