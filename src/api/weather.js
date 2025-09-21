@@ -1,8 +1,8 @@
 // geo location api call
 
-export const getGeoLoc = async () => {
+export const getGeoLoc = async (place) => {
   const geoApi = await fetch(
-    "https://geocoding-api.open-meteo.com/v1/search?name=Oyo"
+    `https://geocoding-api.open-meteo.com/v1/search?name=${place}`
   );
 
   const geoData = await geoApi.json();
@@ -20,7 +20,7 @@ export const getGeoLoc = async () => {
 
 export const getCurrentWeather = async (lat, lon) => {
   const res = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=apparent_temperature,precipitation,wind_speed_10m,relative_humidity_2m`
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&timezone=auto`
   );
 
   const data = await res.json();

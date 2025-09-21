@@ -151,3 +151,20 @@ body {
   font-family: var(--font-DMSans);
   font-weight: 500;
 }
+
+.circle {
+  animation: spinCircle 2s ease-in infinite;
+}
+
+.circle-2 {
+  animation-delay: 1s;
+}
+
+@keyframes spinCircle {
+  0%, 100% {
+    transform: translateY(4px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}

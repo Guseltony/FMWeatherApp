@@ -22,6 +22,34 @@ export const DailyForecast = () => {
   
       fetchWeatherData()
     }, [lat, lon])
+
+  if (!lon || !lat || !data) return (
+  <div>
+        {
+              <div className='flex flex-col gap-20 items-start'>
+                <p className='text-preset-5a'>Daily forecast</p>
+
+                <div className='grid grid-cols-3 md:grid-cols-7 gap-16 w-[100%]'>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+                  <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1 h-[165px]' >
+                  </div>
+
+                </div>
+          </div>
+            }
+      </div>
+    )
   
   return (
     <div>

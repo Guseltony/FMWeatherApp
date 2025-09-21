@@ -34,23 +34,26 @@ export const CurrentWeather = () => {
 <div>
       {
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
-                <div className='px-24 py-0 md:py-80 rounded-20 bg-neutral-800  w-[100%] bg-no-repeat bg-cover h-[286px] flex items-center justify-center gap-16 md:gap-0'>
-                    <div className="spinner">
-                      <div className='w-[12px] h-[12px]'></div>
+                <div className='px-24 py-0 md:py-80 rounded-20 bg-neutral-800  w-[100%] bg-no-repeat bg-cover h-[286px] flex items-center justify-center gap-14 flex-col'>
+                    <div className="spinner flex space-x-10 items-center justify-center">
+                      <div className='w-[12px] h-[12px] bg-neutral-0 rounded-full circle circle-1'></div>
+                      <div className='w-[12px] h-[12px] bg-neutral-0 rounded-full circle circle-2'></div>
+                      <div className='w-[12px] h-[12px] bg-neutral-0 rounded-full circle circle-3'></div>
                     </div>
-                    <p className='text-preset-6'>loading . . .</p>
+                    <p className='text-preset-6'>loading...</p>
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
                   <CurrentCard title='Feels like' dataDetails={'-'}/>
                   <CurrentCard title='Humidity' dataDetails={'-'}/>
                   <CurrentCard title='Wind' dataDetails={'-'}/>
-                  <CurrentCard title='Feels like' dataDetails={'-'}/>
+                  <CurrentCard title='Precipitation' dataDetails={'-'}/>
                 </div>  
               </div>
           }
     </div>
   )
+
 
   
   return (
@@ -60,7 +63,7 @@ export const CurrentWeather = () => {
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
                 <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-no-repeat bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0'>
                         <div className='flex flex-col gap-12 items-center md:items-start justify-center'>
-                          <h1 className='text-preset-4'>{town}, {country}</h1>
+                          <h1 className='text-preset-4 text-center' >{town}, {country}</h1>
                           <p className='text-preset-6'>{day}, {month} {date}, { year}</p>
                         </div>
                   
@@ -71,10 +74,10 @@ export const CurrentWeather = () => {
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
-                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.apparent_temperature)}°`} />
+                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}°`} />
                   <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}%`} />
                   <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} km/h`} />
-                  <CurrentCard title='Feels like' dataDetails={`${data?.precipitation} mm`} />
+                  <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} mm`} />
                 </div>  
               </div>
           }

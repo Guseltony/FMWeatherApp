@@ -25,8 +25,42 @@ export const HourlyForecast = () => {
       }, [lat, lon, hour])
 
       console.log(data)
-  
-  
+
+
+
+   if (!lon || !lat || !data) return (
+    <div>
+        {
+          <div  className='col-span-1 rounded-20 px-16 py-20 md:px-24 md:py-24 bg-neutral-800 flex flex-col items-center gap-16' >
+            <div className='flex items-center justify-between w-full relative'>
+              <h1 className='text-preset-5a'>Hourly Forecast</h1>
+              <div className='flex items-center gap-12 select-none cursor-pointer rounded-8 bg-neutral-600 px-16 py-8 relative'>
+                <p className='text-preset-7 font-medium capitalize'>-</p>
+                <img src='/src/assets/images/icon-dropdown.svg' alt="" />
+              </div>
+            </div>
+           
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+
+        </div>
+        }
+        </div>
+      )
   return (
     <>
       {lat && lon && data &&
@@ -54,13 +88,14 @@ export const HourlyForecast = () => {
                 <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600' key={i}>
                   <div className='flex gap-8 items-center'>
                     <img src="/src/assets/images/icon-rain.webp" alt=""  className='w-[40px] h-[40px]'/>
-                    <p className='text-preset-5b'>{ hw.time > 12 ? (hw.time - 12) : (hw.time.slice('')[1]) } { hw.time > 12 ? "PM" : "AM" }</p>
+                    <p className='text-preset-5b'>{ hw.time.slice('')[0] === 0 ? hw.time.slice('')[1] : hw.time > 12 ? hw.time - 12 : hw.time} { hw.time > 12 ? "PM" : "AM" }</p>
                   </div>
                   <p className='text-preset-7'>{Math.round( hw.temp)}°</p>
                 </div>
               ))
             }
-        </div>}
+        </div>
+      }
     </>
 
   )
