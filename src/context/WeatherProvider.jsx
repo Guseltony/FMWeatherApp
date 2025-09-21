@@ -16,7 +16,7 @@ export const WeatherProvider = ({children}) => {
     country: null
   })
 
-  const [place, setPlace] = useState('')
+  const [place, setPlace] = useState('oyo')
 
    const todayDate = new Date()
 

@@ -42,6 +42,7 @@ export const getDailyData = async (lat, lon) => {
   const dailyTime = await response?.daily?.time;
   const dailyTempMax = await response?.daily?.temperature_2m_max;
   const dailyTempMin = await response?.daily?.temperature_2m_min;
+  const weatherCode = await response?.daily?.weather_code;
 
   const dayArray = [
     "Sunday",
@@ -62,31 +63,36 @@ export const getDailyData = async (lat, lon) => {
     day: dayIndex[i].slice(0, 3),
     max: d,
     min: dailyTempMin[i],
+    code: weatherCode[i],
   }));
 
-  console.log(dayIndex);
   return dailyForecastData;
 };
 
 // hourly weather forecast api call
 
-export const getHourlyWeather = async (hour) => {
+export const getHourlyWeather = async (lat, lon, hour) => {
   const getApi = await fetch(
-    "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=auto"
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=weather_code,temperature_2m&timezone=auto`
   );
 
   const response = await getApi.json();
 
   const hourlyTime = response?.hourly?.time
-    .slice(hour + 1, hour + 9)
+    ?.slice(hour + 1, hour + 9)
     .map((t) => {
       return t.split("T")[1].split(":")[0];
     });
-  const hourlyTemp = response?.hourly?.temperature_2m.slice(hour + 1, hour + 9);
+  const hourlyTemp = response?.hourly?.temperature_2m?.slice(
+    hour + 1,
+    hour + 9
+  );
+  const weatherCode = response?.hourly?.weather_code?.slice(hour + 1, hour + 9);
 
   const hourlyForecast = hourlyTime.map((t, i) => ({
     time: t,
     temp: hourlyTemp[i],
+    code: weatherCode[i],
   }));
 
   return hourlyForecast;

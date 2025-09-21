@@ -3,6 +3,7 @@ import { WeatherProvider } from '../context/WeatherProvider'
 import { getCurrentWeather } from '../api/weather'
 import { useWeather } from '../context/weatherContext'
 import { CurrentCard } from './CurrentCard'
+import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const CurrentWeather = () => {
 
@@ -21,6 +22,16 @@ export const CurrentWeather = () => {
         console.log(error)
       }
     }
+
+    const imperialWeather = async () => {
+      const fetchData = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch')
+
+      const res = await fetchData.json()
+
+      console.log('res:', res)
+    }
+
+    imperialWeather()
 
     fetchWeatherData()
   }, [lat, lon])
@@ -68,7 +79,7 @@ export const CurrentWeather = () => {
                         </div>
                   
                         <div className='flex items-center justify-between gap-20'>
-                          <img src="/src/assets/images/icon-sunny.webp" alt="" className='w-[120px] h-[120px]'/>
+                          <img src={getWeatherIcons(data?.weather_code)} alt="" className='w-[120px] h-[120px]'/>
                           <h1 className='text-preset-1'>{Math.round(data?.apparent_temperature)}°</h1>
                         </div>
                 </div>

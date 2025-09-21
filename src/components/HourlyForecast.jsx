@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useWeather } from '../context/weatherContext'
 import { getHourlyWeather } from '../api/weather'
+import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
@@ -13,7 +14,8 @@ export const HourlyForecast = () => {
         
         const fetchWeatherData = async () => {
           try {
-            const weatherData = await getHourlyWeather(hour)
+            const weatherData = await getHourlyWeather(lat, lon, hour)
+
             console.log(weatherData)
             if(weatherData) setData(weatherData)
           } catch (error) {
@@ -61,6 +63,8 @@ export const HourlyForecast = () => {
         }
         </div>
       )
+
+      console.log(data)
   return (
     <>
       {lat && lon && data &&
@@ -87,8 +91,8 @@ export const HourlyForecast = () => {
               data?.map((hw, i) => (
                 <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600' key={i}>
                   <div className='flex gap-8 items-center'>
-                    <img src="/src/assets/images/icon-rain.webp" alt=""  className='w-[40px] h-[40px]'/>
-                    <p className='text-preset-5b'>{ hw.time.slice('')[0] === 0 ? hw.time.slice('')[1] : hw.time > 12 ? hw.time - 12 : hw.time} { hw.time > 12 ? "PM" : "AM" }</p>
+                    <img src={getWeatherIcons(hw.code)} alt=""  className='w-[40px] h-[40px]'/>
+                    <p className='text-preset-5b'>{ hw.time?.slice('')[0] === 0 ? hw.time.slice('')[1] : hw.time > 12 ? hw.time - 12 : hw.time} { hw?.time > 12 ? "PM" : "AM" }</p>
                   </div>
                   <p className='text-preset-7'>{Math.round( hw.temp)}°</p>
                 </div>

@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { getGeoLoc } from '../api/weather'
+import React, {  useState } from 'react'
 import { useWeather } from '../context/weatherContext'
 
 export const Search = () => {
 
-  const { place, setPlace, setLocation, setGeoCode } = useWeather()
+  const { place, setPlace } = useWeather()
   const [value, setValue] = useState()
 
 
