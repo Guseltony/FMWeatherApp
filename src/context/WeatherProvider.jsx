@@ -16,18 +16,22 @@ export const WeatherProvider = ({children}) => {
     country: null
   })
 
-  const [place, setPlace] = useState('oyo')
+  const [place, setPlace] = useState('kiribati')
 
-   const todayDate = new Date()
+  const [metric, setMetric] = useState(true)
+  
+  const [todayDate, setTodayDate] = useState()
+
+  //  const todayDate = new Date()
 
   const dayArray = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const monthArray = ['Jan','Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-  const day = dayArray[todayDate.getDay()]
-  const date = todayDate.getDate()
-  const month = monthArray[todayDate.getMonth()]
-  const year = todayDate.getFullYear()
-  const hour =todayDate.getHours()
+  const day = dayArray[todayDate?.getDay()]
+  const date = todayDate?.getDate()
+  const month = monthArray[todayDate?.getMonth()]
+  const year = todayDate?.getFullYear()
+  const hour =todayDate?.getHours()
 
   useEffect(() => {
     if(!place) return 
@@ -47,7 +51,7 @@ export const WeatherProvider = ({children}) => {
   const [error, setError] = useState(null);
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, dayArray, day, date, month, year, hour, place, setPlace, setGeoCode }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, dayArray, day, date, month, year, setTodayDate, hour, place, setPlace, setGeoCode, setMetric, metric }}>
       {children}
     </WeatherContext.Provider>
   );

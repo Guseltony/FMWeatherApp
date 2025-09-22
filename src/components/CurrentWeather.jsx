@@ -7,34 +7,43 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const CurrentWeather = () => {
 
-  const { day, month, date, year, lat, lon, town, country } = useWeather()
+  const { day, month, date, year, lat, lon, town, country, metric, setTodayDate } = useWeather()
 
   const [data, setData] = useState()
+
+  const [unit, setUnit] = useState()
 
   useEffect(() => {
     if (!lat, !lon) return
     
     const fetchWeatherData = async () => {
-      try {
-        const weatherData = await getCurrentWeather(lat, lon)
-        if(weatherData) setData(weatherData)
-      } catch (error) {
-        console.log(error)
+      if (metric) {
+        try {
+          const weatherData = await getCurrentWeather(lat, lon)
+
+          
+          const timeZone = weatherData?.metricCurrentData?.time
+          
+          setTodayDate(new Date(timeZone)) 
+          
+          if (weatherData) { setData(weatherData.metricCurrentData);  setUnit(weatherData.metricUnit) }
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        try {
+          const weatherData = await getCurrentWeather(lat, lon)
+          const timeZone = weatherData?.imperialCurrentData?.time
+          setTodayDate(new Date(timeZone)) 
+          if (weatherData) { setData(weatherData.imperialCurrentData);  setUnit(weatherData.imperialUnit)}
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
 
-    const imperialWeather = async () => {
-      const fetchData = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch')
-
-      const res = await fetchData.json()
-
-      console.log('res:', res)
-    }
-
-    imperialWeather()
-
     fetchWeatherData()
-  }, [lat, lon])
+  }, [lat, lon, metric])
 
 
   console.log(data)
@@ -85,10 +94,10 @@ export const CurrentWeather = () => {
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
-                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}°`} />
-                  <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}%`} />
-                  <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} km/h`} />
-                  <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} mm`} />
+                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}${unit.temperature_2m}`} />
+                  <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}${unit?.relative_humidity_2m}`} />
+                  <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} ${unit?.wind_speed_10m}`} />
+                  <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
                 </div>  
               </div>
           }

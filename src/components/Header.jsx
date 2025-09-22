@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { unitsArray } from './unitsArray'
 import { Units } from './Units'
+import { useWeather } from '../context/weatherContext'
 
 const Header = () => {
 
   const [showDropDownUnits, setShowDropDownUnits] = useState(false)
 
-  const [metric, setMetric] = useState(true)
+  const {metric, setMetric} = useWeather()
 
   const handleSetMetric = () => {
     setShowDropDownUnits(true)

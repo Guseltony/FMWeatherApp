@@ -5,7 +5,8 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
-    const { lat, lon, day, dayArray, hour } = useWeather()
+  const { lat, lon, day, dayArray, hour, metric } = useWeather()
+  
   const [data, setData] = useState()
     const [showDay, setShowDay] = useState(false)
   
@@ -14,7 +15,7 @@ export const HourlyForecast = () => {
         
         const fetchWeatherData = async () => {
           try {
-            const weatherData = await getHourlyWeather(lat, lon, hour)
+            const weatherData = await getHourlyWeather(lat, lon, hour, metric)
 
             console.log(weatherData)
             if(weatherData) setData(weatherData)
@@ -24,7 +25,7 @@ export const HourlyForecast = () => {
         }
     
         fetchWeatherData()
-      }, [lat, lon, hour])
+      }, [lat, lon, metric, hour])
 
       console.log(data)
 

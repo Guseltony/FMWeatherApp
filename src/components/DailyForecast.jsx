@@ -5,7 +5,7 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const DailyForecast = () => {
 
-  const { lat, lon } = useWeather()
+  const { lat, lon, metric } = useWeather()
   const [data, setData] = useState()
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export const DailyForecast = () => {
       
       const fetchWeatherData = async () => {
         try {
-          const weatherData = await getDailyData(lat, lon)
+          const weatherData = await getDailyData(lat, lon, metric)
           console.log(weatherData)
           if(weatherData) setData(weatherData)
         } catch (error) {
@@ -22,7 +22,7 @@ export const DailyForecast = () => {
       }
   
       fetchWeatherData()
-    }, [lat, lon])
+    }, [lat, lon, metric])
 
     console.log(data)
 
