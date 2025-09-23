@@ -81,7 +81,7 @@ export const CurrentWeather = () => {
       {
             lat && lon && data &&
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
-                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-no-repeat bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0'>
+                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0'>
                         <div className='flex flex-col gap-12 items-center md:items-start justify-center'>
                           <h1 className='text-preset-4 text-center' >{town}, {country}</h1>
                           <p className='text-preset-6'>{day}, {month} {date}, { year}</p>
