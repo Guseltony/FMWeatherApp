@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { WeatherProvider } from '../context/WeatherProvider'
 import { getCurrentWeather } from '../api/weather'
-import { useWeather } from '../context/weatherContext'
+import { useFavorites, useWeather } from '../context/weatherContext'
 import { CurrentCard } from './CurrentCard'
 import { getWeatherIcons } from '../assets/weatherIcons'
+import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
 
 export const CurrentWeather = () => {
 
-  const { day, month, date, year, lat, lon, town, country, metric, setTodayDate } = useWeather()
+  const { day, month, date, year, lat, lon, town, country, metric, setTodayDate, place } = useWeather()
+
+  const {favorites, removeFromFavorites} = useFavorites()
+
+  const {addToFavorites} = useFavorites()
 
   const [data, setData] = useState()
 
@@ -43,11 +48,13 @@ export const CurrentWeather = () => {
     }
 
     fetchWeatherData()
-  }, [lat, lon, metric])
+  }, [lat, lon, metric],)
 
 
   console.log(data)
   console.log(lat, lon)
+
+  console.log('favorites', favorites)
 
 
   if (!lon || !lat || !data) return (
@@ -81,16 +88,36 @@ export const CurrentWeather = () => {
       {
             lat && lon && data &&
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
-                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0'>
-                        <div className='flex flex-col gap-12 items-center md:items-start justify-center'>
-                          <h1 className='text-preset-4 text-center' >{town}, {country}</h1>
-                          <p className='text-preset-6'>{day}, {month} {date}, { year}</p>
-                        </div>
-                  
-                        <div className='flex items-center justify-between gap-20'>
-                          <img src={getWeatherIcons(data?.weather_code)} alt="" className='w-[120px] h-[120px]'/>
-                          <h1 className='text-preset-1'>{Math.round(data?.apparent_temperature)}°</h1>
-                        </div>
+                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
+                  {
+                    data && 
+                      <div className='flex flex-col gap-12 items-center md:items-start justify-center'>
+                        <h1 className='text-preset-4 text-center' >{town}, {country}</h1>
+                        <p className='text-preset-6'>{day}, {month} {date}, { year}</p>
+                      </div>
+                  }
+                      
+                  <div className='flex items-center justify-between gap-20'>
+                    <img src={getWeatherIcons(data?.weather_code)} alt="" className='w-[120px] h-[120px]'/>
+                    <h1 className='text-preset-1'>{Math.round(data?.apparent_temperature)}°</h1>
+                  </div>
+
+              {
+                favorites.map((fav, index) => fav === place ?
+                  <div className='absolute top-6 right-8 cursor-pointer' key={index} onClick={() => removeFromFavorites(fav)}>
+                    <FaHeartCircleMinus size={35} className='text-red-200'/>
+                  </div> :                                                  <div className='absolute top-6 right-8 cursor-pointer' key={index} onClick={() => addToFavorites(place)}>
+                    <FaHeartCirclePlus size={35} className='text-red-200'/>
+                  </div> )
+              }
+
+              {
+                favorites.length === 0 &&
+                <div className='absolute top-6 right-8 cursor-pointer' onClick={() => addToFavorites(place)}>
+                    <FaHeartCirclePlus size={35} className='text-red-200'/>
+                  </div>
+              }
+
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>

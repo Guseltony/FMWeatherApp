@@ -25,6 +25,10 @@ export const WeatherProvider = ({children}) => {
   
   const [todayDate, setTodayDate] = useState()
 
+  const [searching, setSearching] = useState(false)
+
+  // const [setIsSearching, isSearching] = useState(false)
+
   //  const todayDate = new Date()
 
   const dayArray = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -35,6 +39,10 @@ export const WeatherProvider = ({children}) => {
   const month = monthArray[todayDate?.getMonth()]
   const year = todayDate?.getFullYear()
   const hour = todayDate?.getHours()
+
+  // console.log(isSearching)
+
+  console.log(searching)
   
 
 
@@ -69,6 +77,7 @@ export const WeatherProvider = ({children}) => {
             town: placeData.city,
             country: placeData.countryName
           })
+          setPlace(placeData.city)
 
         } catch (err) {
           console.error("API error:", err);
@@ -93,7 +102,10 @@ export const WeatherProvider = ({children}) => {
 
       const locationDetails = await getGeoLoc(place)
       setGeoCode({ lat: locationDetails.lat, lon: locationDetails.lon })
-      setLocation({town: locationDetails?.geoLoc.name, country: locationDetails?.geoLoc.country})
+      setLocation({ town: locationDetails?.geoLoc.name, country: locationDetails?.geoLoc.country })
+
+      localStorage.setItem("place", place)
+      setSearching(false)
       console.log('geoooo:',locationDetails?.geoLoc)
     }
 
@@ -101,7 +113,7 @@ export const WeatherProvider = ({children}) => {
   }, [place])
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, dayArray, day, date, month, year, setTodayDate, hour, place, setPlace, setGeoCode, setMetric, metric }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, dayArray, day, date, month, year, setTodayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching }}>
       {children}
     </WeatherContext.Provider>
   );

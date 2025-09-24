@@ -22,8 +22,8 @@ const Header = () => {
       </div>
 
       {/* units */}
-      <button className='relative px-10 py-8 md:px-16 md:py-12 bg-neutral-800 rounded-8 focus:outline-2 focus:outline-neutral-0 focus:outline-offset-2' onClick={() => setShowDropDownUnits(prev => !prev)}>
-        <div className='flex items-center gap-6 md:gap-10 select-none cursor-pointer' >
+      <button className='relative px-10 py-8 md:px-16 md:py-12 bg-neutral-800 rounded-8 focus:outline-2 focus:outline-neutral-0 focus:outline-offset-2 cursor-pointer' onClick={() => setShowDropDownUnits(prev => !prev)}>
+        <div className='flex items-center gap-6 md:gap-10 select-none' >
           <img src="/src/assets/images/icon-units.svg" alt="" />
           <p className='text-preset-7 font-medium capitalize'>units</p>
           <img src='/src/assets/images/icon-dropdown.svg' alt="" />
