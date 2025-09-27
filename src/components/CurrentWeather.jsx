@@ -8,18 +8,20 @@ import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
 
 export const CurrentWeather = () => {
 
-  const { day, month, date, year, lat, lon, town, country, metric, setTodayDate, place } = useWeather()
+  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country } = useWeather()
 
   const {favorites, removeFromFavorites} = useFavorites()
 
   const {addToFavorites} = useFavorites()
 
-  const [data, setData] = useState()
+  const [data, setData] = useState({})
 
   const [unit, setUnit] = useState()
 
+
   useEffect(() => {
-    if (!lat, !lon) return
+
+    if (!lon || !lat || !data)  return
     
     const fetchWeatherData = async () => {
       if (metric) {
@@ -27,37 +29,79 @@ export const CurrentWeather = () => {
           const weatherData = await getCurrentWeather(lat, lon)
 
           
-          const timeZone = weatherData?.metricCurrentData?.time
+          const timeZone = await weatherData?.metricCurrentData?.time
           
-          setTodayDate(new Date(timeZone)) 
+          await setTodayDate(new Date(timeZone)) 
           
-          if (weatherData) { setData(weatherData.metricCurrentData);  setUnit(weatherData.metricUnit) }
+          if (weatherData && town && country) {
+            const newDate = new Date(timeZone);
+
+            // build fresh fullDate + fullLocation right here
+            const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
+            const fullLocationString = `${town}, ${country}`;
+
+            setTodayDate(newDate); // keep context updated too
+
+            setData({
+              ...weatherData?.metricCurrentData,
+              date: fullDateString,
+              location: fullLocationString
+            });
+
+            setUnit(weatherData.metricUnit);
+            setCurrent(true);
+            setSearching(false);
+          }
+
         } catch (error) {
+          setError(true)
           console.log(error)
         }
       } else {
         try {
           const weatherData = await getCurrentWeather(lat, lon)
-          const timeZone = weatherData?.imperialCurrentData?.time
-          setTodayDate(new Date(timeZone)) 
-          if (weatherData) { setData(weatherData.imperialCurrentData);  setUnit(weatherData.imperialUnit)}
+          const timeZone = await weatherData?.imperialCurrentData?.time
+          await setTodayDate(new Date(timeZone)) 
+
+          if (weatherData) {
+            const newDate = new Date(timeZone);
+
+            // build fresh fullDate + fullLocation right here
+            const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
+            const fullLocationString = `${town}, ${country}`;
+
+            setTodayDate(newDate); // keep context updated too
+
+            setData({
+              ...weatherData?.imperialCurrentData,
+              date: fullDateString,
+              location: fullLocationString
+            });
+
+            setUnit(weatherData.imperialUnit);
+            setCurrent(true);
+            setSearching(false);
+          }
         } catch (error) {
+          setError(true)
           console.log(error)
         }
       }
     }
 
     fetchWeatherData()
-  }, [lat, lon, metric],)
+  }, [lat, lon, metric, country],)
+
+  console.log('data:',data)
+  console.log(isLoading)
+  console.log('today Date:', todayDate)
+
+  // if (!lon || !lat || !data) return setIsLoading(true)
 
 
-  console.log(data)
-  console.log(lat, lon)
-
-  console.log('favorites', favorites)
 
 
-  if (!lon || !lat || !data) return (
+  if (isLoading) return (
 <div>
       {
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
@@ -89,13 +133,14 @@ export const CurrentWeather = () => {
             lat && lon && data &&
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
                 <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
-                  {
-                    data && 
-                      <div className='flex flex-col gap-12 items-center md:items-start justify-center'>
-                        <h1 className='text-preset-4 text-center' >{town}, {country}</h1>
-                        <p className='text-preset-6'>{day}, {month} {date}, { year}</p>
-                      </div>
-                  }
+                {data?.location && data?.date && (
+                  <div className="flex flex-col gap-12 items-center md:items-start justify-center">
+                    <h1 className="text-preset-4 text-center md:text-left line-clamp-2 md:w-[500px]">
+                      {data.location}
+                    </h1>
+                    <p className="text-preset-6">{data.date}</p>
+                  </div>
+                )}
                       
                   <div className='flex items-center justify-between gap-20'>
                     <img src={getWeatherIcons(data?.weather_code)} alt="" className='w-[120px] h-[120px]'/>
@@ -121,7 +166,7 @@ export const CurrentWeather = () => {
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
-                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}${unit.temperature_2m}`} />
+                  <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}${unit?.temperature_2m}`} />
                   <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}${unit?.relative_humidity_2m}`} />
                   <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} ${unit?.wind_speed_10m}`} />
                   <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />

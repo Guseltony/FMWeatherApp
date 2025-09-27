@@ -18,6 +18,17 @@ const weatherIcons = {
   drizzle: drizzle,
 };
 
+const weatherDescriptions = {
+  sunny: "Sunny",
+  storm: "Thunderstorm",
+  snow: "Snowy",
+  rain: "Rainy",
+  cloudy: "Partly Cloudy",
+  overcast: "Overcast",
+  fog: "Foggy",
+  drizzle: "Drizzle",
+};
+
 const weatherCodes = {
   sunny: [0],
   storm: [95, 96, 99],
@@ -35,4 +46,13 @@ export const getWeatherIcons = (code) => {
       return weatherIcons[group];
     }
   }
+};
+
+export const getWeatherDescription = (code) => {
+  for (const [group, codes] of Object.entries(weatherCodes)) {
+    if (codes.includes(code)) {
+      return weatherDescriptions[group];
+    }
+  }
+  return "Unknown"; // fallback
 };

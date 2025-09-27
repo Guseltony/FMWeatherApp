@@ -78,7 +78,7 @@
 }
 
 
-body {
+body, html {
   color: var(--color-neutral-0);
   overflow-x: hidden;
 }

@@ -4,7 +4,7 @@ import { FavoritesContext } from './weatherContext'
 export const FavoritesProvider = ({ children }) => {
   
   const [favorites, setFavorites] = useState([])
-  const [showFavorites, setShowFavorites] = useState([])
+  const [showFavorites, setShowFavorites] = useState(false)
 
   // call the localStorage
  

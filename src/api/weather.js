@@ -130,3 +130,30 @@ export const getHourlyWeather = async (lat, lon, hour, metric) => {
 
   return hourlyForecast;
 };
+
+
+// compare weather
+
+export const getCompareWeather = async (lat, lon) => {
+  const metricRes = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&timezone=auto`
+  );
+
+  const metricData = await metricRes.json();
+
+  const metricCurrentData = metricData?.current;
+
+  const metricUnit = await metricData?.current_units;
+
+  const imperialRes = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`
+  );
+
+  const imperialData = await imperialRes.json();
+
+  const imperialCurrentData = await imperialData?.current;
+
+  const imperialUnit = await imperialData?.current_units;
+
+  return { metricCurrentData, metricUnit, imperialCurrentData, imperialUnit };
+};

@@ -5,21 +5,23 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
-  const { lat, lon, day, dayArray, hour, metric } = useWeather()
+  const { lat, lon, day, dayArray, hour, metric, setError, isLoading, setHourly } = useWeather()
   
-  const [data, setData] = useState()
+  const [data, setData] = useState([])
     const [showDay, setShowDay] = useState(false)
   
       useEffect(() => {
-        if (!lat, !lon) return
+        if (!lon || !lat || !data) return
+        // if (!lat, !lon) return
         
         const fetchWeatherData = async () => {
           try {
             const weatherData = await getHourlyWeather(lat, lon, hour, metric)
 
             console.log(weatherData)
-            if(weatherData) setData(weatherData)
+            if (weatherData) { setData(weatherData); setHourly(true)}
           } catch (error) {
+            setError(true)
             console.log(error)
           }
         }
@@ -27,11 +29,10 @@ export const HourlyForecast = () => {
         fetchWeatherData()
       }, [lat, lon, metric, hour])
 
-      console.log(data)
+        console.log('hourly:', data)
 
 
-
-   if (!lon || !lat || !data) return (
+  if (isLoading) return (
     <div>
         {
           <div  className='col-span-1 rounded-20 px-16 py-20 md:px-24 md:py-24 bg-neutral-800 flex flex-col items-center gap-16' >
@@ -65,7 +66,6 @@ export const HourlyForecast = () => {
         </div>
       )
 
-      console.log(data)
   return (
     <>
       {lat && lon && data &&
