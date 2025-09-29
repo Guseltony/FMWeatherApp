@@ -20,7 +20,7 @@ export const getGeoLoc = async (place) => {
 
 export const getCurrentWeather = async (lat, lon) => {
   const metricRes = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,wind_speed_10m,weather_code&timezone=auto`
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,wind_speed_10m,uv_index,weather_code,visibility,surface_pressure&daily=sunrise,sunset&timezone=auto`
   );
 
   const metricData = await metricRes.json();
@@ -80,21 +80,33 @@ export const getDailyData = async (lat, lon, metric) => {
     return dayArray[newDate.getDay()];
   });
 
+  const daysList = await dailyTime.map((dateStr, index) => {
+        const dateObj = new Date(dateStr);
+        const dayName = dayArray[dateObj.getDay()];
+
+        return {
+          index, // same index as in daily[]
+          date: dateStr, // e.g. "2025-09-29"
+          dayName, // e.g. "Monday"
+        };
+    });
+
   const dailyForecastData = weatherCode.map((w, i) => ({
     day: dayIndex[i].slice(0, 3),
     max: metric ? dailyTempMax[i] : imperialTempMax[i],
     min: metric ? dailyTempMin[i] : imperialTempMin[i],
     code: w,
+    
   }));
 
-  return dailyForecastData;
+  return {dailyForecastData, daysList};
 };
 
 // hourly weather forecast api call
 
 export const getHourlyWeather = async (lat, lon, hour, metric) => {
   const getMetricApi = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=weather_code,temperature_2m`
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,wind_speed_10m,uv_index,visibility,surface_pressure,weather_code&timezone=auto`
   );
 
   const getImperialApi = await fetch(
@@ -106,21 +118,24 @@ export const getHourlyWeather = async (lat, lon, hour, metric) => {
   const response = await getMetricApi.json();
 
   const hourlyTime = response?.hourly?.time
-    ?.slice(hour + 1, hour + 9)
+    ?.slice(hour + 1, hour + 11)
     .map((t) => {
       return t.split("T")[1].split(":")[0];
     });
 
   const hourlyTemp = response?.hourly?.temperature_2m?.slice(
     hour + 1,
-    hour + 9
+    hour + 11
   );
 
   const hourlyImperialTemp = imperialResponse?.hourly?.temperature_2m?.slice(
     hour + 1,
-    hour + 9
+    hour + 11
   );
-  const weatherCode = response?.hourly?.weather_code?.slice(hour + 1, hour + 9);
+
+  const weatherCode = response?.hourly?.weather_code?.slice(hour + 1, hour + 11);
+
+
 
   const hourlyForecast = hourlyTime.map((t, i) => ({
     time: t,
@@ -130,6 +145,41 @@ export const getHourlyWeather = async (lat, lon, hour, metric) => {
 
   return hourlyForecast;
 };
+
+
+// temp metric for switching days
+
+export const fetchWeatherForSelectedDay = async (lat, lon, selectedDay) => {
+  const getApi = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,wind_speed_10m,uv_index,visibility,surface_pressure,weather_code&timezone=auto`
+  );
+
+  const res = await getApi.json()
+
+  const data = res?.hourly 
+
+  const time = data.time
+
+  const targetTimeStamp = `${selectedDay}T12:00`
+
+  const index = time.findIndex(t => t === targetTimeStamp)
+
+  if (index === -1) return null
+
+  return {
+    time: targetTimeStamp,
+    apparent_temperature: data.apparent_temperature[index],
+    precipitation: data.precipitation[index],
+    temperature_2m: data.temperature_2m[index],
+    surface_pressure: data.surface_pressure[index],
+    relative_humidity_2m: data.relative_humidity_2m[index],
+    uv_index: data.uv_index[index],
+    visibility: data.visibility[index],
+    weather_code: data.weather_code[index],
+    wind_speed_10m: data.wind_speed_10m[index]
+
+  }
+}
 
 
 // compare weather
@@ -157,3 +207,15 @@ export const getCompareWeather = async (lat, lon) => {
 
   return { metricCurrentData, metricUnit, imperialCurrentData, imperialUnit };
 };
+
+
+
+// // advance weather variable {uv, pressure, visibility, sunrise | sunset}
+
+// export const advanceWeatherData = async (lat, lon) => {
+//   const fetchingUrl = await fetch(
+//     "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=sunrise,sunset&hourly=visibility,uv_index,pressure_msl&timezone=auto"
+//   );
+
+//   const advData = await fetchingUrl.json()
+// }

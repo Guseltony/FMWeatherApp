@@ -28,6 +28,7 @@ useEffect(() => {
     if (!favorites.includes(place)) {
       setFavorites([...favorites, place]);
     }
+    setShowFavorites(false)
   };
 
   const removeFromFavorites = (place) => {

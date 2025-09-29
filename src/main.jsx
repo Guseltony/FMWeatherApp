@@ -7,10 +7,10 @@ import { FavoritesProvider } from './context/FavoritesProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <WeatherProvider>
-      <FavoritesProvider>
+    <FavoritesProvider>
+      <WeatherProvider>
         <App />
+      </WeatherProvider>
       </FavoritesProvider>
-    </WeatherProvider>
   </StrictMode>,
 )

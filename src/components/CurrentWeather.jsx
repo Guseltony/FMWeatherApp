@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { WeatherProvider } from '../context/WeatherProvider'
-import { getCurrentWeather } from '../api/weather'
+import { fetchWeatherForSelectedDay, getCurrentWeather } from '../api/weather'
 import { useFavorites, useWeather } from '../context/weatherContext'
 import { CurrentCard } from './CurrentCard'
 import { getWeatherIcons } from '../assets/weatherIcons'
@@ -8,7 +8,7 @@ import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
 
 export const CurrentWeather = () => {
 
-  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country } = useWeather()
+  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country, setShowMore, showMore, selectedDay } = useWeather()
 
   const {favorites, removeFromFavorites} = useFavorites()
 
@@ -18,8 +18,13 @@ export const CurrentWeather = () => {
 
   const [unit, setUnit] = useState()
 
+  console.log(showMore)
+
+
 
   useEffect(() => {
+
+    setShowMore(false)
 
     if (!lon || !lat || !data)  return
     
@@ -28,13 +33,22 @@ export const CurrentWeather = () => {
         try {
           const weatherData = await getCurrentWeather(lat, lon)
 
+          const todayData = await weatherData?.metricCurrentData
+
+          const selectedDayWeather = await fetchWeatherForSelectedDay(lat, lon, selectedDay)
+
+          
           
           const timeZone = await weatherData?.metricCurrentData?.time
           
           await setTodayDate(new Date(timeZone)) 
+
+          const checkTime = todayDate?.toISOString().split('T')[0]
+
+          const dataToShow = selectedDay && selectedDay !== checkTime ? selectedDayWeather : todayData
           
           if (weatherData && town && country) {
-            const newDate = new Date(timeZone);
+            const newDate = selectedDay ? new Date(selectedDay) : new Date(timeZone);
 
             // build fresh fullDate + fullLocation right here
             const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
@@ -43,11 +57,10 @@ export const CurrentWeather = () => {
             setTodayDate(newDate); // keep context updated too
 
             setData({
-              ...weatherData?.metricCurrentData,
+              ...dataToShow,
               date: fullDateString,
               location: fullLocationString
             });
-
             setUnit(weatherData.metricUnit);
             setCurrent(true);
             setSearching(false);
@@ -90,9 +103,10 @@ export const CurrentWeather = () => {
     }
 
     fetchWeatherData()
-  }, [lat, lon, metric, country],)
+  }, [lat, lon, metric, country, selectedDay])
 
   console.log('data:',data)
+  console.log('unit:',unit)
   console.log(isLoading)
   console.log('today Date:', todayDate)
 
@@ -130,7 +144,7 @@ export const CurrentWeather = () => {
   return (
     <div>
       {
-            lat && lon && data &&
+            lat && lon && data && 
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
                 <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
                 {data?.location && data?.date && (
@@ -165,13 +179,34 @@ export const CurrentWeather = () => {
 
                 </div>
 
-                <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
+            
+            <div className='w-full'>
+              <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%] mb-10'>
                   <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}${unit?.temperature_2m}`} />
                   <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}${unit?.relative_humidity_2m}`} />
                   <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} ${unit?.wind_speed_10m}`} />
                   <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
-                </div>  
               </div>
+            
+              <div className='w-full'>
+                <div className='text-preset-7 flex items-center gap-6 select-none cursor-pointer' onClick={() => setShowMore(prev => !prev)}>
+                <p>More Weather Details</p>
+                <img src="/src/assets/images/icon-dropdown.svg" alt="" />
+              </div>
+              {
+                showMore && 
+                  <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%] mt-10'>
+                    <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
+                    <CurrentCard title='Visibility' dataDetails={`${data?.visibility.toLocaleString()}`} />
+                    <CurrentCard title='UV Index' dataDetails={`${data?.uv_index} ${unit?.uv_index}`} />
+                    <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
+                  </div>  
+              }
+            </div>
+            </div>
+
+            
+            </div>
           }
     </div>
   )

@@ -2,17 +2,18 @@ import React, { useState } from 'react'
 import { getCurrentWeather, getGeoLoc } from '../api/weather'
 import { getWeatherDescription, getWeatherIcons } from '../assets/weatherIcons'
 import { CompareCard } from './CompareCard'
-import { useWeather } from '../context/weatherContext'
+import { useFavorites, useWeather } from '../context/weatherContext'
 import { TbColumnsOff } from "react-icons/tb";
 import { FaCircleMinus } from "react-icons/fa6";
 
 const CompareWeather = () => {
 
   const [cities, setCities] = useState([])
-  // const [fullCity, setFullCity] = useState([{}])
   const [value, setValue] = useState()
   const [weatherArray, setWeatherArray] = useState([])
-const { setShowCompare} = useWeather()
+  const { setShowCompare} = useWeather()
+
+  const {favorites} = useFavorites()
 
 const handleAddCity = (value) => {
   if(value === '') return
@@ -46,7 +47,7 @@ const handleAddCity = (value) => {
   getCityWeather()
 }
 
-
+  console.log('fav:', favorites)
 
   const removeCity = (id) => {
     const filterWeatherArray = weatherArray.filter(w => w.city !== id)
@@ -61,7 +62,7 @@ const handleAddCity = (value) => {
 
   return (
 
-    <div className='bg-black w-full h-[100%] absolute top-0 left-0  z-50 px-16 lg:flex items-center justify-center'>
+    <div className='bg-black/70 backdrop-blur-2xl w-full h-[100%] absolute top-0 left-0  z-50 px-16 lg:flex items-center justify-center'>
       <div className='flex items-center justify-center flex-col gap-24'>
         <TbColumnsOff className='text-red-700 text-xl absolute top-20 right-20 cursor-pointer' onClick={() => handleCompareOff()}/>
         {/* adding cities */}

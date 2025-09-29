@@ -10,6 +10,7 @@ export const Search = () => {
   const [showSearch, setShowSearch] = useState(true);
 
   const wrapperRef = useRef(null); // 👈 to track clicks outside
+  const inputRef = useRef(null); 
 
   // Show dropdown when clicking div
   const handleClick = () => {
@@ -23,6 +24,17 @@ export const Search = () => {
   useEffect(() => {
     if (value !== "") {
       setShowFavorites(false);
+      setShowSearch(true)
+    } if (value === '' && favorites.length !== 0 && document.activeElement === inputRef.current) {
+      setShowFavorites(true)
+      setShowSearch(false)
+    }  if (searching) {
+      setShowSearch(false)
+      setShowFavorites(false)
+    }
+      if(!searching){
+      // setShowFavorites(true)
+      setShowSearch(true)
     } 
 
     // else {
@@ -30,20 +42,21 @@ export const Search = () => {
     //     setShowFavorites(true);
     //   }
     // }
-  }, [value, favorites.length]);
+  }, [value, favorites.length, searching]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setShowFavorites(false);
-      }
+        setShowSearch(true);
+      } 
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, []);
+  }, [showSearch]);
 
   const getGeoLocation = async () => {
     if (value.trim() === "") return;
@@ -58,6 +71,7 @@ export const Search = () => {
   const handleFavClick = (fav) => {
     if (fav === place) {
       setShowFavorites(false);
+      setShowSearch(true)
       return;
     }
     setPlace(fav);
@@ -68,7 +82,7 @@ export const Search = () => {
   return (
     <div
       className="relative w-[100%] flex items-center justify-center"
-      ref={wrapperRef} // 👈 wrap everything
+      ref={wrapperRef}
     >
       <div className="flex items-center gap-12 md:gap-16 w-[100%] xl:w-[656px] h-[124px] md:h-[56px] flex-col md:flex-row relative">
         <div className="w-[100%] relative">
@@ -82,6 +96,7 @@ export const Search = () => {
               onChange={(e) => setValue(e.target.value)}
               value={value}
               placeholder="Search for a place..."
+              ref={inputRef}
               className="text-preset-5b font-medium border-0 outline-0 w-full"
             />
           </div>

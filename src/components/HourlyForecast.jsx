@@ -5,10 +5,15 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
-  const { lat, lon, day, dayArray, hour, metric, setError, isLoading, setHourly } = useWeather()
+  const { lat, lon, day, hour, metric, setError, isLoading, setHourly, showMore, daysList, setSelectedDay } = useWeather()
   
   const [data, setData] = useState([])
     const [showDay, setShowDay] = useState(false)
+
+
+  const handleDayClick = (date) => {
+      setSelectedDay(date)
+    }
   
       useEffect(() => {
         if (!lon || !lat || !data) return
@@ -16,10 +21,15 @@ export const HourlyForecast = () => {
         
         const fetchWeatherData = async () => {
           try {
-            const weatherData = await getHourlyWeather(lat, lon, hour, metric)
+            const weatherData = await getHourlyWeather(lat, lon, hour, metric, showMore)
+
+            const sliceData = weatherData?.slice(0, 8)
 
             console.log(weatherData)
-            if (weatherData) { setData(weatherData); setHourly(true)}
+            if (weatherData) {
+              setData(showMore ? weatherData : sliceData)
+              setHourly(true)
+            }
           } catch (error) {
             setError(true)
             console.log(error)
@@ -27,7 +37,7 @@ export const HourlyForecast = () => {
         }
     
         fetchWeatherData()
-      }, [lat, lon, metric, hour])
+      }, [lat, lon, metric, hour, showMore])
 
         console.log('hourly:', data)
 
@@ -80,8 +90,8 @@ export const HourlyForecast = () => {
                     showDay && 
                       <div className='px-8 py-8 flex items-center flex-col w-[214px] h-[313] gap-4 rounded-12 bg-neutral-800 border-neutral-600 absolute right-0 top-40 cursor-pointer'>
                         {
-                          dayArray?.map((day, index) => 
-                            <p key={index} className='rounded-8 hover:bg-neutral-700 px-8 py-10 w-[100%]'>{ day}</p>
+                          daysList?.map((day, index) => 
+                            <p key={index} className='rounded-8 hover:bg-neutral-700 px-8 py-10 w-[100%]' onClick={() => handleDayClick(day.date)}>{ day?.dayName}</p>
                           )
                         }
                       </div>

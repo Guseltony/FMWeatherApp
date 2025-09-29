@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getGeoLoc } from "../api/weather";
-import { WeatherContext } from "./weatherContext";
+import { useFavorites, WeatherContext } from "./weatherContext";
 
 export const WeatherProvider = ({children}) => {
 
@@ -20,11 +20,18 @@ export const WeatherProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(true)
   const [metric, setMetric] = useState(true)
   const [todayDate, setTodayDate] = useState()
-  const [searching, setSearching] = useState(false)
+  const [searching, setSearching] = useState(true)
   const [current, setCurrent] = useState(false)
   const [hourly, setHourly] = useState(false)
   const [daily, setDaily] = useState(false)
   const [showCompare, setShowCompare] = useState(false)
+  const [reload, setReload] = useState(false)
+  const [showMore, setShowMore] = useState(false)
+    const [daysList, setDaysList] = useState([])
+    const [selectedDay, setSelectedDay] = useState()
+
+  const { setShowFavorites } = useFavorites()
+  
 
   const dayArray = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const monthArray = ['Jan','Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
@@ -97,7 +104,7 @@ export const WeatherProvider = ({children}) => {
       };
 
       navigator.geolocation.getCurrentPosition(success, failure);
-    }, []);
+    }, [reload]);
 
 
   useEffect(() => {
@@ -111,6 +118,8 @@ export const WeatherProvider = ({children}) => {
         localStorage.setItem("place", place)
         // setSearching(false)
         console.log('geoooo:', locationDetails?.geoLoc)
+        setShowFavorites(false)
+
       } catch (error) {
       setError(true)
       console.log(error)
@@ -122,7 +131,7 @@ export const WeatherProvider = ({children}) => {
   }, [place])
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, dayArray, monthArray, day, date, month, year, setTodayDate, todayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily,fullDate, fullLocation, showCompare, setShowCompare }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, day, date, month, year, setTodayDate, todayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily,fullDate, fullLocation, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay }}>
       {children}
     </WeatherContext.Provider>
   );
