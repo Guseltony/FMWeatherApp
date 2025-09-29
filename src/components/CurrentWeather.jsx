@@ -8,7 +8,7 @@ import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
 
 export const CurrentWeather = () => {
 
-  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country, setShowMore, showMore, selectedDay } = useWeather()
+  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country, setShowMore, showMore, selectedDay, searching, setSelectedDay } = useWeather()
 
   const {favorites, removeFromFavorites} = useFavorites()
 
@@ -36,6 +36,8 @@ export const CurrentWeather = () => {
           const todayData = await weatherData?.metricCurrentData
 
           const selectedDayWeather = await fetchWeatherForSelectedDay(lat, lon, selectedDay)
+
+          if(searching) setSelectedDay('')
 
           
           
