@@ -164,7 +164,11 @@ export const fetchWeatherForSelectedDay = async (lat, lon, selectedDay) => {
 
   const index = time.findIndex(t => t === targetTimeStamp)
 
-  if (index === -1) return null
+  const timeSlice = data?.time.slice(0, 10);
+  const tempSlice = data?.temperature_2m?.slice(0, 10);
+  const codeSlice = data?.weather_code?.slice(0, 10);
+
+  if (index === -1) return null;
 
   return {
     time: targetTimeStamp,
@@ -176,9 +180,13 @@ export const fetchWeatherForSelectedDay = async (lat, lon, selectedDay) => {
     uv_index: data.uv_index[index],
     visibility: data.visibility[index],
     weather_code: data.weather_code[index],
-    wind_speed_10m: data.wind_speed_10m[index]
-
-  }
+    wind_speed_10m: data.wind_speed_10m[index],
+    fullHourly: timeSlice.map((t, i) => ({
+      time: t?.split("T")[1].split(":")[0],
+      temp: tempSlice[i],
+      code: codeSlice[i],
+    })),
+  };
 }
 
 

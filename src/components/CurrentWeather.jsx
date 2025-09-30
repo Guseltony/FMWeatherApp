@@ -37,26 +37,32 @@ export const CurrentWeather = () => {
 
           const selectedDayWeather = await fetchWeatherForSelectedDay(lat, lon, selectedDay)
 
-          if(searching) setSelectedDay('')
 
+          console.log('selectedDayWeather:', selectedDayWeather)
+
+          console.log('today data:', todayData)
+
+          if(searching) setSelectedDay('')
           
           
-          const timeZone = await weatherData?.metricCurrentData?.time
+          const timeZone =  await todayData?.time
+
+          // const selectedDayTime = selectedDayWeather?.time
           
           await setTodayDate(new Date(timeZone)) 
 
-          const checkTime = todayDate?.toISOString().split('T')[0]
+          // const selectedDate =  new Date(selectedDayTime)
 
-          const dataToShow = selectedDay && selectedDay !== checkTime ? selectedDayWeather : todayData
+          const currentDate = todayDate?.toISOString().split('T')[0]
+
+          const dataToShow = selectedDay && selectedDay !== currentDate ? selectedDayWeather : todayData
           
           if (weatherData && town && country) {
-            const newDate = selectedDay ? new Date(selectedDay) : new Date(timeZone);
+            const newDate = selectedDay && selectedDay !== currentDate ? new Date(selectedDay) : new Date(timeZone);
 
             // build fresh fullDate + fullLocation right here
             const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
             const fullLocationString = `${town}, ${country}`;
-
-            setTodayDate(newDate); // keep context updated too
 
             setData({
               ...dataToShow,
@@ -191,11 +197,11 @@ export const CurrentWeather = () => {
               </div>
             
               <div className='w-full'>
-                <div className='text-preset-7 flex items-center gap-6 select-none cursor-pointer' onClick={() => setShowMore(prev => !prev)}>
+                <div className='text-preset-7 flex items-center gap-6 select-none cursor-pointer w-fit' onClick={() => setShowMore(prev => !prev)}>
                 <p>More Weather Details</p>
                 <img src="/src/assets/images/icon-dropdown.svg" alt="" />
               </div>
-              {
+              {/* {
                 showMore && 
                   <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%] mt-10'>
                     <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
@@ -203,7 +209,22 @@ export const CurrentWeather = () => {
                     <CurrentCard title='UV Index' dataDetails={`${data?.uv_index} ${unit?.uv_index}`} />
                     <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
                   </div>  
-              }
+              } */}
+                
+                <div
+                className={`
+                    transition-all duration-500 ease-in-out
+                    ${showMore ? 'h-auto opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'h-0 opacity-0 scale-95 translate-y-2 pointer-events-none'}
+                  `}
+                >
+                  <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-full mt-10'>
+                    <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
+                    <CurrentCard title='Visibility' dataDetails={`${data?.visibility.toLocaleString()}`} />
+                    <CurrentCard title='UV Index' dataDetails={`${data?.uv_index} ${unit?.uv_index}`} />
+                    <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
+                  </div>
+              </div>
+
             </div>
             </div>
 

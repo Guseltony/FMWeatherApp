@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { unitsArray } from './unitsArray'
 import { Units } from './Units'
 import { useWeather } from '../context/weatherContext'
@@ -7,6 +7,8 @@ import { TbColumns } from "react-icons/tb";
 const Header = () => {
 
   const [showDropDownUnits, setShowDropDownUnits] = useState(false)
+
+  const wrapperRef = useRef()
  
 
   const {metric, setMetric, error, isLoading, setShowCompare} = useWeather()
@@ -15,6 +17,20 @@ const Header = () => {
     setShowDropDownUnits(true)
     setMetric(prev => !prev)
   }
+
+
+  useEffect(() => {
+        const handleOutsideClick = (e) => {
+          if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+            setShowDropDownUnits(false)
+          } 
+        };
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => {
+          document.removeEventListener("mousedown", handleOutsideClick);
+        };
+      }, [showDropDownUnits]);
+  
   
 
   return (
@@ -41,7 +57,7 @@ const Header = () => {
           {/* dropdown */}
           {
             showDropDownUnits && 
-              <div className='px-8 py-6 bg-neutral-800 border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-[52px] flex-col z-[30]'>
+              <div className='px-8 py-6 bg-neutral-800 border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-[52px] flex-col z-[30]' ref={wrapperRef}>
                 <button className='px-8 py-10 rounded-8 hover:bg-neutral-700 select-none cursor-pointer focus:outline-1 focus:outline-neutral-0 focus:outline-offset-2' onClick={() => handleSetMetric()}>
                   <p className='text-preset-7 font-medium text-neutral-0 w-fit'>{ metric ? 'Switch to Imperial' : 'Switch to Metric'}</p>
                 </button>

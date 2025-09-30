@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFavorites, useWeather } from "../context/weatherContext";
 import { FaHeartCircleMinus } from "react-icons/fa6";
+import { FaMicrophone } from "react-icons/fa6";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
+import { LuAudioWaveform } from "react-icons/lu";
 
 export const Search = () => {
   const { place, setPlace, searching, setSearching } = useWeather();
@@ -19,6 +22,9 @@ export const Search = () => {
       setShowSearch(false);
     }
   };
+
+   const {result, isRecording, startRecording, stopRecording} = useSpeechRecognition()
+
 
   // Hide dropdown while typing, re-show if cleared
   useEffect(() => {
@@ -58,6 +64,15 @@ export const Search = () => {
     };
   }, [showSearch]);
 
+  // inside Search component
+useEffect(() => {
+  if (result) {
+    setValue(result);
+    console.log("🎤 Updated input with:", result);
+  }
+}, [result]);
+
+
   const getGeoLocation = async () => {
     if (value.trim() === "") return;
 
@@ -79,17 +94,36 @@ export const Search = () => {
     setShowFavorites(false);
   };
 
+const handleMic = () => {
+  console.log("Mic clicked. isRecording:", isRecording);
+  if (!isRecording) {
+    startRecording();
+  } else {
+    stopRecording();
+  }
+};
+
+
+  
+
   return (
     <div
       className="relative w-[100%] flex items-center justify-center"
       ref={wrapperRef}
     >
       <div className="flex items-center gap-12 md:gap-16 w-[100%] xl:w-[656px] h-[124px] md:h-[56px] flex-col md:flex-row relative">
+        
         <div className="w-[100%] relative">
           <div
             className="px-24 py-16 flex items-center gap-16 bg-neutral-800 rounded-12 w-[100%] h-[100%] hover:bg-neutral-700 transition-all duration-200 ease-in focus-within:outline-2 focus-within:outline-neutral-0 focus-within:outline-offset-2"
             onClick={handleClick}
           >
+            <div className="cursor-pointer" onClick={() => handleMic()}>
+          {
+            isRecording ? <LuAudioWaveform size={24} className="text-red-500"/> : 
+              <FaMicrophone size={24} className="text-blue-500 hover:text-blue-700"/>
+          }
+        </div>
             <img src="/src/assets/images/icon-search.svg" alt="" />
             <input
               type="text"
