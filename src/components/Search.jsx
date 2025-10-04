@@ -101,7 +101,21 @@ const handleMic = () => {
   } else {
     stopRecording();
   }
-};
+  };
+  
+  const handleKeyDown = async (event) => {
+    if (value.trim() === "") return;
+    
+    console.log('event:', event)
+    if (event.key === "Enter") {
+    await setPlace(value);
+    setValue("");
+    setShowFavorites(false);
+    setSearching(true);
+    setShowSearch(true);
+      
+    }
+  }
 
 
   
@@ -130,6 +144,7 @@ const handleMic = () => {
               onChange={(e) => setValue(e.target.value)}
               value={value}
               placeholder="Search for a place..."
+              onKeyDown={(e) => handleKeyDown(e)}
               ref={inputRef}
               className="text-preset-5b font-medium border-0 outline-0 w-full"
             />

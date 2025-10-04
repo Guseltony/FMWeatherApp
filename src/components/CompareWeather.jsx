@@ -45,7 +45,13 @@ const handleAddCity = (value) => {
   }
 
   getCityWeather()
-}
+  }
+  
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleAddCity(value);
+    }
+  }
 
   console.log('fav:', favorites)
 
@@ -67,7 +73,13 @@ const handleAddCity = (value) => {
         <TbColumnsOff className='text-red-700 text-xl absolute top-20 right-20 cursor-pointer' onClick={() => handleCompareOff()}/>
         {/* adding cities */}
         <div className='flex items-center justify-center flex-col xl:flex-row gap-16 w-[100%] mt-96 lg:mt-0'>
-          <input type="text" placeholder='type a city name' onChange={(e) => setValue(e.target.value)} value={value} className='text-preset-5b font-medium border-0 outline-0 w-[100%] xl:w-[656px] h-[56px] bg-neutral-800 rounded-12 hover:bg-neutral-700 transition-all duration-200 pl-24 py-16'/>
+          <input
+            type="text"
+            placeholder='type a city name'
+            onChange={(e) => setValue(e.target.value)}
+            value={value}
+            onKeyDown={(e) => handleKeyDown(e)}
+            className='text-preset-5b font-medium border-0 outline-0 w-[100%] xl:w-[656px] h-[56px] bg-neutral-800 rounded-12 hover:bg-neutral-700 transition-all duration-200 pl-24 py-16' />
           <button type="submit" className='px-24 py-16 bg-blue-500 text-preset-5b font-medium rounded-12 cursor-pointer w-[100%] md:w-fit hover:bg-blue-700 transition-all duration-200 ease-in focus:outline-2 outline-blue-500 outline-offset-2' onClick={() => handleAddCity(value)}>Add</button>
         </div>
 

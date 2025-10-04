@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { WeatherProvider } from '../context/WeatherProvider'
 import { fetchWeatherForSelectedDay, getCurrentWeather } from '../api/weather'
@@ -5,10 +6,12 @@ import { useFavorites, useWeather } from '../context/weatherContext'
 import { CurrentCard } from './CurrentCard'
 import { getWeatherIcons } from '../assets/weatherIcons'
 import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
+import { LuSunrise } from "react-icons/lu";
+import { LuSunset } from "react-icons/lu";
 
 export const CurrentWeather = () => {
 
-  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, todayDate, setSearching, dayArray, monthArray, town, country, setShowMore, showMore, selectedDay, searching, setSelectedDay } = useWeather()
+  const { lat, lon, metric, setTodayDate, place, isLoading, setError, setCurrent, setSearching, dayArray, monthArray, town, country, selectedDay, searching, setSelectedDay, isDay, setIsDay } = useWeather()
 
   const {favorites, removeFromFavorites} = useFavorites()
 
@@ -18,112 +21,72 @@ export const CurrentWeather = () => {
 
   const [unit, setUnit] = useState()
 
-  console.log(showMore)
-
-
 
   useEffect(() => {
 
-    setShowMore(false)
+    const fullLocationString = `${town}, ${country}`;
 
     if (!lon || !lat || !data)  return
-    
-    const fetchWeatherData = async () => {
-      if (metric) {
-        try {
-          const weatherData = await getCurrentWeather(lat, lon)
+      
+      const fetchWeatherData = async () => {
+          try {
+            const weatherData = await getCurrentWeather(lat, lon, metric)
+  
+            const todayData = await weatherData?.data
+            const sunriseSunset = await weatherData?.sunriseSunset
 
-          const todayData = await weatherData?.metricCurrentData
+            const selectedDayWeather = await fetchWeatherForSelectedDay(lat, lon, selectedDay, metric)
+  
+            if(searching) setSelectedDay('')
+            
+            
+            const timeZone = await todayData?.time
+            
+            const todayDate = new Date(timeZone)
 
-          const selectedDayWeather = await fetchWeatherForSelectedDay(lat, lon, selectedDay)
+            
+            const currentDate = todayDate.toISOString().split('T')[0]
 
-
-          console.log('selectedDayWeather:', selectedDayWeather)
-
-          console.log('today data:', todayData)
-
-          if(searching) setSelectedDay('')
-          
-          
-          const timeZone =  await todayData?.time
-
-          // const selectedDayTime = selectedDayWeather?.time
-          
-          await setTodayDate(new Date(timeZone)) 
-
-          // const selectedDate =  new Date(selectedDayTime)
-
-          const currentDate = todayDate?.toISOString().split('T')[0]
-
-          const dataToShow = selectedDay && selectedDay !== currentDate ? selectedDayWeather : todayData
-          
-          if (weatherData && town && country) {
-            const newDate = selectedDay && selectedDay !== currentDate ? new Date(selectedDay) : new Date(timeZone);
-
-            // build fresh fullDate + fullLocation right here
-            const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
-            const fullLocationString = `${town}, ${country}`;
-
-            setData({
-              ...dataToShow,
-              date: fullDateString,
-              location: fullLocationString
-            });
-            setUnit(weatherData.metricUnit);
-            setCurrent(true);
-            setSearching(false);
+            
+            await setTodayDate(todayDate) 
+            
+            const sunRiseData = await selectedDay && selectedDay !== currentDate ? sunriseSunset?.sunrise?.filter((s) => s.split('T')[0] === selectedDay) :
+                                                              sunriseSunset?.sunrise?.filter((s) => s.split('T')[0] === currentDate)
+            const sunSetData = await selectedDay && selectedDay !== currentDate ? sunriseSunset?.sunset?.filter((s) => s.split('T')[0] === selectedDay) :
+                                                              sunriseSunset?.sunset?.filter((s) => s.split('T')[0] === currentDate)
+  
+  
+            const dataToShow = selectedDay && selectedDay !== currentDate ? selectedDayWeather : todayData
+            
+            if (weatherData && town && country) {
+              const newDate = selectedDay && selectedDay !== currentDate ? new Date(selectedDay) : new Date(timeZone);
+  
+              const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
+              setData({
+                ...dataToShow,
+                date: fullDateString,
+                location: fullLocationString,
+                sunrise: sunRiseData[0].split('T')[1],
+                sunset: sunSetData[0].split('T')[1]
+              });
+              setUnit(weatherData.unit);
+              setCurrent(true);
+              setSearching(false);
+              setIsDay(todayData?.is_day)
+            }
+  
+          } catch (error) {
+            setError(true)
+            console.log(error)
           }
-
-        } catch (error) {
-          setError(true)
-          console.log(error)
-        }
-      } else {
-        try {
-          const weatherData = await getCurrentWeather(lat, lon)
-          const timeZone = await weatherData?.imperialCurrentData?.time
-          await setTodayDate(new Date(timeZone)) 
-
-          if (weatherData) {
-            const newDate = new Date(timeZone);
-
-            // build fresh fullDate + fullLocation right here
-            const fullDateString = `${dayArray[newDate.getDay()]}, ${monthArray[newDate.getMonth()]} ${newDate.getDate()}, ${newDate.getFullYear()}`;
-            const fullLocationString = `${town}, ${country}`;
-
-            setTodayDate(newDate); // keep context updated too
-
-            setData({
-              ...weatherData?.imperialCurrentData,
-              date: fullDateString,
-              location: fullLocationString
-            });
-
-            setUnit(weatherData.imperialUnit);
-            setCurrent(true);
-            setSearching(false);
-          }
-        } catch (error) {
-          setError(true)
-          console.log(error)
-        }
       }
-    }
 
-    fetchWeatherData()
-  }, [lat, lon, metric, country, selectedDay])
+  
+      fetchWeatherData()
+    
+  }, [lat, lon, metric, selectedDay])
 
-  console.log('data:',data)
-  console.log('unit:',unit)
-  console.log(isLoading)
-  console.log('today Date:', todayDate)
-
-  // if (!lon || !lat || !data) return setIsLoading(true)
-
-
-
-
-  if (isLoading) return (
+  if (isLoading || !data.location || !data.date) return (
 <div>
       {
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
@@ -136,11 +99,15 @@ export const CurrentWeather = () => {
                     <p className='text-preset-6'>loading...</p>
                 </div>
 
-                <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%]'>
+                <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%] mb-10'>
                   <CurrentCard title='Feels like' dataDetails={'-'}/>
                   <CurrentCard title='Humidity' dataDetails={'-'}/>
                   <CurrentCard title='Wind' dataDetails={'-'}/>
                   <CurrentCard title='Precipitation' dataDetails={'-'}/>
+                  <CurrentCard title='Pressure' dataDetails={'-'}/>
+                  <CurrentCard title='Visibility' dataDetails={'-'}/>
+                  <CurrentCard title='UV Index' dataDetails={'-'}/>
+                  <CurrentCard title='Sunrise | Sunset' dataDetails={'-'}/>
                 </div>  
               </div>
           }
@@ -152,7 +119,7 @@ export const CurrentWeather = () => {
   return (
     <div>
       {
-            lat && lon && data && 
+            lat && lon && data && data.date && data.location &&
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
                 <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
                 {data?.location && data?.date && (
@@ -193,39 +160,21 @@ export const CurrentWeather = () => {
                   <CurrentCard title='Feels like' dataDetails={`${Math.round(data?.temperature_2m)}${unit?.temperature_2m}`} />
                   <CurrentCard title='Humidity' dataDetails={`${data?.relative_humidity_2m}${unit?.relative_humidity_2m}`} />
                   <CurrentCard title='Wind' dataDetails={`${Math.round(data?.wind_speed_10m)} ${unit?.wind_speed_10m}`} />
-                  <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
-              </div>
-            
-              <div className='w-full'>
-                <div className='text-preset-7 flex items-center gap-6 select-none cursor-pointer w-fit' onClick={() => setShowMore(prev => !prev)}>
-                <p>More Weather Details</p>
-                <img src="/src/assets/images/icon-dropdown.svg" alt="" />
-              </div>
-              {/* {
-                showMore && 
-                  <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-[100%] mt-10'>
-                    <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
-                    <CurrentCard title='Visibility' dataDetails={`${data?.visibility.toLocaleString()}`} />
+                <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
+                <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
+                    <CurrentCard title='Visibility' dataDetails={`${data?.visibility?.toFixed(0)}`} />
                     <CurrentCard title='UV Index' dataDetails={`${data?.uv_index} ${unit?.uv_index}`} />
-                    <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
-                  </div>  
-              } */}
-                
-                <div
-                className={`
-                    transition-all duration-500 ease-in-out
-                    ${showMore ? 'h-auto opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'h-0 opacity-0 scale-95 translate-y-2 pointer-events-none'}
-                  `}
-                >
-                  <div className='grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-24 w-full mt-10'>
-                    <CurrentCard title='Pressure' dataDetails={`${Math.round(data?.surface_pressure)}${unit?.surface_pressure}`} />
-                    <CurrentCard title='Visibility' dataDetails={`${data?.visibility.toLocaleString()}`} />
-                    <CurrentCard title='UV Index' dataDetails={`${data?.uv_index} ${unit?.uv_index}`} />
-                    <CurrentCard title='Precipitation' dataDetails={`${data?.precipitation} ${unit?.precipitation}`} />
-                  </div>
+                    <div className={`${isDay ? 'bg-neutral-0 text-black ' : 'bg-neutral-800 text-neutral-0'} px-20 py-20 border-neutral-600 flex gap-24 flex-col rounded-12 `}>
+                      <div className='flex flex-row items-center justify-between'>
+                        <LuSunrise size={25} className='text-red-500' />
+                        <p className='text-preset-6'>{ data?.sunrise}</p>
+                      </div>
+                      <div className='flex flex-row items-center justify-between'>
+                        <LuSunset  size={25} className='text-red-500'/>
+                        <p className='text-preset-6'>{ data?.sunset}</p>
+                      </div>
+                    </div>
               </div>
-
-            </div>
             </div>
 
             

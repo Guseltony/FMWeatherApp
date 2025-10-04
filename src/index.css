@@ -83,6 +83,15 @@ body, html {
   overflow-x: hidden;
 }
 
+.light-theme {
+  --bg-color: #f5f5f5;
+  --text-color: #222;
+}
+.dark-theme {
+  --bg-color: #0a0a1a;
+  --text-color: #fff;
+}
+
 .text-preset-1 {
   font-size: var(--text-xxl);
   line-height: var(--leading-normal);

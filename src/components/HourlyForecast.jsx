@@ -5,28 +5,34 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
-  const { lat, lon, day, hour, metric, setError, isLoading, setHourly, showMore, daysList, selectedDay, setSelectedDay, todayDate,setReload } = useWeather()
+  const { lat, lon, day, metric, setError, isLoading, setHourly, daysList, selectedDay, setSelectedDay, todayDate, setIsLoading, isDay } = useWeather()
   
   const [data, setData] = useState([])
-    const [showDay, setShowDay] = useState(false)
+  const [showDay, setShowDay] = useState(false)
+  const [foreCastDay, setForecastDay] = useState('')
 
     const wrapperRef = useRef()
 
 
-  const handleDayClick = (date) => {
+  const handleDayClick = (date, name) => {
     setSelectedDay(date)
-    setReload(true)
+    setIsLoading(true)
+    setForecastDay(name)
     }
   
       useEffect(() => {
         if (!lon || !lat || !data) return
         // if (!lat, !lon) return
+
         
         const fetchWeatherData = async () => {
-          try {
-            const weatherData = await getHourlyWeather(lat, lon, hour, metric, showMore)
 
-            const selectedDayData = await fetchWeatherForSelectedDay(lat, lon, selectedDay)
+          const hour = await todayDate?.getHours()
+
+          try {
+            const weatherData = await getHourlyWeather(lat, lon, hour, metric)
+
+            const selectedDayData = await fetchWeatherForSelectedDay(lat, lon, selectedDay, metric)
 
             const selectedData = await selectedDayData?.fullHourly
 
@@ -34,17 +40,14 @@ export const HourlyForecast = () => {
 
             const dataToShow = selectedDay && selectedDay !== currentDate ? selectedData : weatherData
 
-
-            console.log("selectedDay:", selectedDay)
-            console.log("currentDate:", currentDate)
-            console.log("selectedDay = currentDate:", currentDate === selectedDay)
-
-            const sliceData = dataToShow?.slice(0, 8)
-
             console.log(weatherData)
-            if (weatherData) {
-              setData(showMore ? dataToShow : sliceData)
+            console.log('selectedDayData:', selectedDayData)
+
+            if (weatherData || selectedDayData) {
+              setData( dataToShow)
               setHourly(true)
+              setShowDay(false)
+              setIsLoading(false)
             }
           } catch (error) {
             setError(true)
@@ -53,7 +56,7 @@ export const HourlyForecast = () => {
         }
     
         fetchWeatherData()
-      }, [lat, lon, metric, hour, showMore, selectedDay, todayDate])
+      }, [lat, lon, metric, selectedDay])
   
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -67,10 +70,6 @@ export const HourlyForecast = () => {
         document.removeEventListener("mousedown", handleOutsideClick);
       };
     }, [showDay]);
-
-        console.log('hourly:', data)
-        console.log('daysList:', daysList)
-
 
   if (isLoading) return (
     <div>
@@ -100,6 +99,10 @@ export const HourlyForecast = () => {
             </div>
             <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
             </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
+            <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 h-[60px]' >
+            </div>
 
         </div>
         }
@@ -112,16 +115,16 @@ export const HourlyForecast = () => {
         <div  className='col-span-1 rounded-20 px-16 py-20 md:px-24 md:py-24 bg-neutral-800 flex flex-col items-center gap-16' >
             <div className='flex items-center justify-between w-full relative' ref={wrapperRef}>
               <h1 className='text-preset-5a'>Hourly Forecast</h1>
-              <div className='flex items-center gap-12 select-none cursor-pointer rounded-8 bg-neutral-600 px-16 py-8 relative'  onClick={ () => setShowDay(prev => !prev)}>
-                <p className='text-preset-7 font-medium capitalize'>{ day }</p>
-                <img src='/src/assets/images/icon-dropdown.svg' alt="" />
+              <div className={`flex items-center gap-12 select-none cursor-pointer rounded-8 px-16 py-8 relative ${isDay ? 'bg-neutral-0' : 'bg-neutral-600'} `}  onClick={ () => setShowDay(prev => !prev)}>
+                <p className={`${isDay ? 'text-black' : 'text-neutral-0'} text-preset-7 font-medium capitalize`}>{ selectedDay ? foreCastDay : day }</p>
+              <img src='/src/assets/images/icon-dropdown.svg' alt="" className={ `${isDay ? 'filter invert' : ''}`} />
               </div>
                   {
                     showDay && 
-                      <div className='px-8 py-8 flex items-center flex-col w-[214px] h-[313] gap-4 rounded-12 bg-neutral-800 border-neutral-600 absolute right-0 top-40 cursor-pointer z-[66]' >
+                      <div className={`px-8 py-8 flex items-center flex-col w-[214px] h-[313] gap-4 rounded-12 ${isDay ? 'bg-neutral-0' : 'bg-neutral-800'} border-neutral-600 absolute right-0 top-40 cursor-pointer z-[66]`} >
                         {
                     daysList?.map((day, index) => {
-                            return <p key={index} className={`${day.date === selectedDay ? 'bg-neutral-700' : ''} rounded-8 hover:bg-neutral-700 px-8 py-10 w-[100%]`} onClick={() => handleDayClick(day.date)}>{ day?.dayName}</p>
+                            return <p key={index} className={`${day.date === selectedDay && isDay ? 'bg-neutral-500' : ''} ${isDay ? 'text-black' : 'text-neutral-0'} rounded-8 hover:bg-neutral-700 px-8 py-10 w-[100%]`} onClick={() => handleDayClick(day?.date, day?.dayName)}>{ day?.dayName}</p>
                           }
                           )
                         }
@@ -129,31 +132,18 @@ export const HourlyForecast = () => {
                   }
             </div>
 
-            {/* {
-              data?.map((hw, i) => (
-                <div className='pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600' key={i}>
-                  <div className='flex gap-8 items-center'>
-                    <img src={getWeatherIcons(hw.code)} alt=""  className='w-[40px] h-[40px]'/>
-                    <p className='text-preset-5b'>{ hw.time?.slice('')[0] === 0 ? hw.time.slice('')[1] : hw.time > 12 ? hw.time - 12 : hw.time} { hw?.time > 12 ? "PM" : "AM" }</p>
-                  </div>
-                  <p className='text-preset-7'>{Math.round( hw.temp)}°</p>
-                </div>
-              ))
-            } */}
-
         <div
             className={`
               transition-all duration-500 ease-in-out overflow-hidden w-full flex flex-col items-center gap-16
-              ${showMore ? 'max-h-[2000px] opacity-100' : 'max-h-[600px] opacity-90'}
             `}
           >
             {data?.map((hw, i) => (
               <div
                 key={i}
-                className="pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between bg-neutral-700 border-neutral-600 transition-all duration-300 ease-in-out transform"
+                className={`pr-16 pl-12 py-10 rounded-8 gap-8 flex items-center w-full justify-between ${isDay ? 'bg-[#F5F5F5] text-black' : 'bg-neutral-700 text-neutral-0' } border-neutral-600 transition-all duration-300 ease-in-out transform`}
               >
                 <div className="flex gap-8 items-center">
-                  <img src={getWeatherIcons(hw.code)} alt="" className="w-[40px] h-[40px]" />
+                  <img src={getWeatherIcons(hw.code)} alt="" className={`w-[40px] h-[40px] ${isDay ? 'filter invert' : ''}`} />
                   <p className="text-preset-5b">
                     {hw.time?.slice('')[0] === 0 ? hw.time.slice('')[1] : hw.time > 12 ? hw.time - 12 : hw.time}
                     {hw?.time > 12 ? ' PM' : ' AM'}

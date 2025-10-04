@@ -29,6 +29,8 @@ export const WeatherProvider = ({children}) => {
   const [showMore, setShowMore] = useState(false)
     const [daysList, setDaysList] = useState([])
     const [selectedDay, setSelectedDay] = useState()
+  const [isDay, setIsDay] = useState()
+  
 
   const { setShowFavorites } = useFavorites()
   
@@ -55,8 +57,6 @@ export const WeatherProvider = ({children}) => {
     } else setIsLoading(true)
 
   }, [current, daily, hourly])
-
-  console.log("geoCode:", geoCode)
 
     useEffect(() => {
       if (!navigator.geolocation) {
@@ -131,7 +131,7 @@ export const WeatherProvider = ({children}) => {
   }, [place])
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, day, date, month, year, setTodayDate, todayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily,fullDate, fullLocation, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, day, date, month, year, setTodayDate, todayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily,fullDate, fullLocation, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay }}>
       {children}
     </WeatherContext.Provider>
   );

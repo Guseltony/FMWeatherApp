@@ -5,7 +5,7 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const DailyForecast = () => {
 
-  const { lat, lon, metric, setError, isLoading, setDaily, setDaysList } = useWeather()
+  const { lat, lon, metric, setError, isLoading, setDaily, setDaysList, isDay } = useWeather()
   const [data, setData] = useState([])
 
 
@@ -28,9 +28,6 @@ export const DailyForecast = () => {
   
       fetchWeatherData()
     }, [lat, lon, metric])
-
-    console.log('dailyData:', data)
-
 
   if (isLoading) return (
   <div>
@@ -73,12 +70,12 @@ export const DailyForecast = () => {
 
                   {
                     data.map((d, index) => 
-                    <div className='flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 bg-neutral-800 border-neutral-600 flex-1' key={index}>
+                    <div className={`flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 ${isDay ? 'bg-neutral-0 text-black' : 'bg-neutral-800 text-neutral-0'} border-neutral-600 flex-1`} key={index}>
                     <p className='text-preset-6'>{d.day}</p>
-                    <img src={getWeatherIcons(d.code)} alt="" className='w-[60px] h-[60px]' />
+                    <img src={getWeatherIcons(d.code)} alt="" className={`${isDay ? 'filter invert' : ''} w-[60px] h-[60px]`} />
                     <div className='flex items-center justify-between w-full'>
-                      <p className='text-preset-7'>{Math.round( d.max)}°</p>
-                      <p className='text-preset-7'>{Math.round( d.min)}°</p>
+                      <p className={`text-preset-7 ${isDay ? '' : 'text-neutral-0'}`}>{Math.round( d.max)}°</p>
+                      <p className={`text-preset-7 ${isDay ? '' : 'text-neutral-0'}`}>{Math.round( d.min)}°</p>
                     </div>
                   </div>
                     )
