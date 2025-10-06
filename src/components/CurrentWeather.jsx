@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchWeatherForSelectedDay, getCurrentWeather } from '../api/weather'
 import { useFavorites, useWeather } from '../context/weatherContext'
 import { CurrentCard } from './CurrentCard'
-import { getWeatherDescription, getWeatherIcons } from '../assets/weatherIcons'
+import { getWeatherDescription, getWeatherIcons } from '../utils/weatherIcons'
 import { FaHeartCircleMinus, FaHeartCirclePlus } from "react-icons/fa6";
 import { LuSunrise, LuSunset } from "react-icons/lu";
 

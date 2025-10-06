@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useWeather } from '../context/weatherContext'
 import { getDailyData } from '../api/weather'
-import { getWeatherIcons } from '../assets/weatherIcons'
+import { getWeatherIcons } from '../utils/weatherIcons'
 
 export const DailyForecast = () => {
 

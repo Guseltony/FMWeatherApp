@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react'
 import { getCurrentWeather, getGeoLoc } from '../api/weather'
-import { getWeatherDescription, getWeatherIcons } from '../assets/weatherIcons'
+import { getWeatherDescription, getWeatherIcons } from '../utils/weatherIcons'
 import { CompareCard } from './CompareCard'
 import { useWeather } from '../context/weatherContext'
 import { TbColumnsOff } from "react-icons/tb";
