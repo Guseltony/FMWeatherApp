@@ -133,7 +133,7 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
                   <FaMicrophone size={24} className="text-blue-500 hover:text-blue-700"/>
               }
             </div>
-            <img src="/src/assets/images/icon-search.svg" alt="" />
+            <img src="/images/icon-search.svg" alt="" />
             <input
               type="text"
               onChange={(e) => {setValue(e.target.value.toLocaleLowerCase())}}
@@ -154,7 +154,7 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
             <div className="absolute left-0 z-50 px-8 py-8 flex items-center mt-12 bg-neutral-800 rounded-12 w-[100%] h-[55] hover:bg-neutral-700 transition-all duration-200 ease-in">
               <div className="px-8 py-10 flex gap-10 rounded-8">
                 <img
-                  src="/src/assets/images/icon-loading.svg"
+                  src="/images/icon-loading.svg"
                   alt=""
                   className="animate-spin"
                 />

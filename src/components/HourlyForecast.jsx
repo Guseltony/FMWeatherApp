@@ -76,7 +76,7 @@ export const HourlyForecast = () => {
               <h1 className='text-preset-5a'>Hourly Forecast</h1>
               <div className='flex items-center gap-12 select-none cursor-pointer rounded-8 bg-neutral-600 px-16 py-8 relative'>
                 <p className='text-preset-7 font-medium capitalize'>-</p>
-                <img src='/src/assets/images/icon-dropdown.svg' alt="" />
+                <img src='/images/icon-dropdown.svg' alt="" />
               </div>
             </div>
            
@@ -114,7 +114,7 @@ export const HourlyForecast = () => {
               <h1 className={`${isDay ? 'text-Lmode-text' : ''} text-preset-5a`}>Hourly Forecast</h1>
               <div className={`flex items-center gap-12 select-none cursor-pointer rounded-8 px-16 py-8 relative ${isDay ?  'bg-Lmode-bg text-Lmode-text' : 'bg-neutral-700 text-Nmode-text'} `}  onClick={ () => setShowDay(prev => !prev)}>
                 <p className={`${isDay ?  ' text-Lmode-text' : ' text-Nmode-text'} text-preset-7 font-medium capitalize`}>{ selectedDay ? foreCastDay : day }</p>
-                <img src='/src/assets/images/icon-dropdown.svg' alt="" className={ `${isDay ? 'filter invert' : ''}`} />
+                <img src='/images/icon-dropdown.svg' alt="" className={ `${isDay ? 'filter invert' : ''}`} />
               </div>
                   {
                     showDay && 

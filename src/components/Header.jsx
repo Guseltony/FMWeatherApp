@@ -37,7 +37,7 @@ const Header = () => {
     <div className='flex items-center justify-between'>
       {/* logo */}
       <div>
-        <img src='/src/assets/images/logo.svg' alt="Weather Now" className='w-[137.9px] md:w-full'/>
+        <img src='/images/logo.svg' alt="Weather Now" className='w-[137.9px] md:w-full'/>
       </div>
 
       <div className='flex gap-12 items-center justify-center'>
@@ -49,9 +49,9 @@ const Header = () => {
         {/* units */}
         <button className={`${ error || isLoading ? 'cursor-not-allowed pointer-events-none' : '' } ${isDay ? 'bg-Lmode-bg text-Lmode-text' : 'bg-Nmode-bg text-Nmode-text'} relative px-10 py-8 md:px-16 md:py-12  rounded-8 focus:outline-2 focus:outline-neutral-0 focus:outline-offset-2`} onClick={() => setShowDropDownUnits(prev => !prev)} ref={wrapperRef}>
           <div className='flex items-center gap-6 md:gap-10 select-none cursor-pointer' >
-            <img src="/src/assets/images/icon-units.svg" alt=""  className={`${isDay ? 'filter invert' : ''}`}/>
+            <img src="/images/icon-units.svg" alt=""  className={`${isDay ? 'filter invert' : ''}`}/>
             <p className='text-preset-7 font-medium capitalize'>units</p>
-            <img src='/src/assets/images/icon-dropdown.svg' alt="" className={`${isDay ? 'filter invert' : ''}`}/>
+            <img src='/images/icon-dropdown.svg' alt="" className={`${isDay ? 'filter invert' : ''}`}/>
           </div>
 
           {/* dropdown */}
