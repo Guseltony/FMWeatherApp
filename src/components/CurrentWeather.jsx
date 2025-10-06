@@ -125,7 +125,7 @@ export const CurrentWeather = () => {
       {
             lat && lon && data && data.date && data.location &&
               <div className='flex items-center flex-col justify-center gap-32 w-[100%]'>
-                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/src/assets/images/bg-today-small.svg")] md:bg-[url("/src/assets/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
+                <div className='px-24 py-0 md:py-80 rounded-20 bg-[url("/images/bg-today-small.svg")] md:bg-[url("/images/bg-today-large.svg")] w-[100%] bg-cover h-[286px] flex items-center justify-center md:justify-between flex-col md:flex-row gap-16 md:gap-0 relative'>
                 {data?.location && data?.date && (
                   <div className="flex flex-col gap-12 items-center md:items-start justify-center">
                     <h1 className="text-preset-4 text-center md:text-left line-clamp-2 md:w-[500px]">

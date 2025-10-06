@@ -1,5 +1,4 @@
 
-import { useEffect } from "react"
 import CompareWeather from "./components/CompareWeather"
 import Error from "./components/Error"
 import Header from "./components/Header"
@@ -11,22 +10,6 @@ import { useWeather } from "./context/weatherContext"
 function App() {
 
   const {error, showCompare, isDay} = useWeather()
-
-
-  //   useEffect(() => {
-  //   if (showCompare) {
-  //     document.body.style.overflow = "hidden";
-  //     document.documentElement.style.overflow = "hidden"; // 🔹 also html
-  //   } else {
-  //     document.body.style.overflow = "auto";
-  //     document.documentElement.style.overflow = "auto";
-  //   }
-  
-  //   return () => {
-  //     document.body.style.overflow = "auto";
-  //     document.documentElement.style.overflow = "auto";
-  //   };
-  // }, [showCompare]);
 
 
   return (

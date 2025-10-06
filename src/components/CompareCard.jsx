@@ -3,7 +3,7 @@
 import { WiHumidity } from "react-icons/wi"
 import { AiTwotoneDelete } from "react-icons/ai"
 import { LuWind } from "react-icons/lu"
-import { motion } from "framer-motion"
+// import { motion } from "framer-motion"
 
 
 export const CompareCard = ({

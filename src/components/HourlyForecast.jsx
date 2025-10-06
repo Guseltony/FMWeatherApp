@@ -35,7 +35,8 @@ export const HourlyForecast = () => {
 
             const selectedData = await selectedDayData?.fullHourly
 
-            const currentDate = await todayDate?.toISOString().split('T')[0]
+            const currentDate = todayDate ? new Date(todayDate).toISOString().split('T')[0] : null;
+
 
             const dataToShow = selectedDay && selectedDay !== currentDate ? selectedData : weatherData
 

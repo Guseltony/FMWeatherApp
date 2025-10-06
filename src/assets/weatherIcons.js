@@ -1,11 +1,11 @@
-import sunny from "./images/icon-sunny.webp";
-import storm from "./images/icon-storm.webp";
-import snow from "./images/icon-snow.webp";
-import rain from "./images/icon-rain.webp";
-import cloudy from "./images/icon-partly-cloudy.webp";
-import overcast from "./images/icon-overcast.webp";
-import fog from "./images/icon-fog.webp";
-import drizzle from "./images/icon-drizzle.webp";
+import sunny from "/images/icon-sunny.webp";
+import storm from "/images/icon-storm.webp";
+import snow from "/images/icon-snow.webp";
+import rain from "/images/icon-rain.webp";
+import cloudy from "/images/icon-partly-cloudy.webp";
+import overcast from "/images/icon-overcast.webp";
+import fog from "/images/icon-fog.webp";
+import drizzle from "/images/icon-drizzle.webp";
 
 const weatherIcons = {
   sunny: sunny,
