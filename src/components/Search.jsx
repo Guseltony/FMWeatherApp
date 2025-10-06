@@ -6,7 +6,7 @@ import { LuAudioWaveform } from "react-icons/lu";
 import { getGeoLoc } from "../api/weather";
 
 export const Search = () => {
-  const { setPlace, searching, setSearching, setIsLoading, setGeoCode, setLocation, setError, isLoading, setErrorMessage, errorMessage } = useWeather();
+  const { setPlace, searching, setSearching, setIsLoading, setGeoCode, setLocation, isLoading, setErrorMessage, errorMessage } = useWeather();
   const { favorites, showFavorites, setShowFavorites, removeFromFavorites } = useFavorites();
 
   const [value, setValue] = useState("");
@@ -79,6 +79,7 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
       setErrorMessage('')
     } catch (error) {
       console.log(error)
+      setSearching(false)
       setErrorMessage('Location not found')
     }
   }
