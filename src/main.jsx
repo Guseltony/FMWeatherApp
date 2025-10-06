@@ -4,6 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { WeatherProvider } from './context/WeatherProvider.jsx'
 import { FavoritesProvider } from './context/FavoritesProvider.jsx'
+// PWA support
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW({
+  onNeedRefresh() { },
+  onOfflineReady() { },
+})
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -67,7 +67,7 @@ export const WeatherProvider = ({children}) => {
         setPlace("London");
         setLocation({ town: "London", country: "United Kingdom" });
         setSearching(false);
-      }, 8000); // 8s timeout to prevent infinite skeleton loading
+      }, 15000); // 15s timeout to prevent infinite skeleton loading
 
       const success = async (pos) => {
         clearTimeout(timeoutId); // ✅ stop timeout once success
