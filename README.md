@@ -39,7 +39,14 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+### Screenshot
+
+![Mobile View](./mobile.png)
+![Desktop dark View](./dark-mode.png)
+![Error View](./error.png)
+![DeskTop light View](./light-mode.png)
+
+
 
 ### Links
 
