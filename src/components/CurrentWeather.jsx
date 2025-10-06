@@ -9,7 +9,7 @@ import { LuSunrise, LuSunset } from "react-icons/lu";
 
 export const CurrentWeather = () => {
 
-  const { lat, lon, metric, setTodayDate, isLoading, setError, setCurrent, setSearching, dayArray, monthArray, town, country, setAllSet, selectedDay, searching, setSelectedDay, isDay, setIsDay, setDay } = useWeather()
+  const { lat, lon, metric, setTodayDate, isLoading, setError, setCurrent, setSearching, dayArray, monthArray, town, country, setAllSet, selectedDay, searching, setSelectedDay, isDay, setIsDay, setDay, setHour, todayDate } = useWeather()
 
   const {favorites, removeFromFavorites, addToFavorites} = useFavorites()
 
@@ -39,13 +39,15 @@ export const CurrentWeather = () => {
             
             const timeZone = await todayData?.time
             
-            const todayDate = new Date(timeZone)
+            const cityDate =  new Date(timeZone)
 
             
-            const currentDate = todayDate.toISOString().split('T')[0]
+            const currentDate = cityDate?.toISOString().split('T')[0]
 
             
-            await setTodayDate(todayDate) 
+            await setTodayDate(cityDate) 
+
+            await setHour(cityDate?.getHours())
             
             const sunRiseData = await selectedDay && selectedDay !== currentDate ? sunriseSunset?.sunrise?.filter((s) => s.split('T')[0] === selectedDay) :
                                                               sunriseSunset?.sunrise?.filter((s) => s.split('T')[0] === currentDate)

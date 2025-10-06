@@ -5,7 +5,7 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const HourlyForecast = () => {
 
-  const { lat, lon, metric, setError, isLoading, setHourly, allSet, daysList, selectedDay, setSelectedDay, todayDate, day, setIsLoading, isDay } = useWeather()
+  const { lat, lon, metric, setError, isLoading, setHourly, allSet, daysList, selectedDay, setSelectedDay, todayDate, day, setIsLoading, isDay, hour} = useWeather()
   
   const [data, setData] = useState([])
   const [showDay, setShowDay] = useState(false)
@@ -27,7 +27,6 @@ export const HourlyForecast = () => {
         
         const fetchWeatherData = async () => {
 
-          const hour = await todayDate?.getHours()
 
           try {
             const weatherData = await getHourlyWeather(lat, lon, hour, metric)
@@ -38,14 +37,7 @@ export const HourlyForecast = () => {
 
             const currentDate = await todayDate?.toISOString().split('T')[0]
 
-            const currentDay = await todayDate?.getDay()
-
-            console.log(currentDay)
-
             const dataToShow = selectedDay && selectedDay !== currentDate ? selectedData : weatherData
-
-            console.log(weatherData)
-            console.log('selectedDayData:', selectedDayData)
 
             if (weatherData || selectedDayData) {
               setData(dataToShow)
@@ -61,9 +53,7 @@ export const HourlyForecast = () => {
         }
     
         fetchWeatherData()
-      }, [lat, lon, metric, selectedDay, day])
-
-      console.log('dayList:', daysList)
+      }, [lat, lon, metric, selectedDay, day, hour])
   
     // Close dropdown when clicking outside
     useEffect(() => {

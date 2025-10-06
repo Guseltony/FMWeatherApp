@@ -18,7 +18,7 @@ export const WeatherProvider = ({children}) => {
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [metric, setMetric] = useState(true)
-  const [todayDate, setTodayDate] = useState()
+  const [todayDate, setTodayDate] = useState('')
   const [searching, setSearching] = useState(true)
   const [current, setCurrent] = useState(false)
   const [hourly, setHourly] = useState(false)
@@ -32,6 +32,7 @@ export const WeatherProvider = ({children}) => {
   const [allSet, setAllSet] = useState(false)
   const [ day, setDay] = useState()
   const [ index, setIndex] = useState(0)
+  const [ hour, setHour] = useState()
   
   
 
@@ -88,7 +89,7 @@ export const WeatherProvider = ({children}) => {
     }, [reload]);
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, setTodayDate, todayDate, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay, allSet, setAllSet,  day, setDay, index, setIndex }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, setTodayDate, todayDate, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay, allSet, setAllSet,  day, setDay, index, setIndex, hour, setHour }}>
       {children}
     </WeatherContext.Provider>
   );
