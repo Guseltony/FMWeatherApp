@@ -14,6 +14,10 @@
   --color-neutral-700: #302f4a;
   --color-neutral-800: #262540;
   --color-neutral-900: #02012c;
+  --color-Lmode-bg: #f1f5f9;
+  --color-Nmode-bg: #262540;
+  --color-Lmode-text: #1e293b; 
+  --color-Nmode-text: #ffffff; 
 
   --color-orange: #ff820a;
   --color-blue-light: #4658d9;

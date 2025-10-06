@@ -1,46 +1,56 @@
+
 import React, { useEffect, useState } from 'react'
 import { FavoritesContext } from './weatherContext'
 
 export const FavoritesProvider = ({ children }) => {
-  
   const [favorites, setFavorites] = useState([])
   const [showFavorites, setShowFavorites] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
-  // call the localStorage
- 
-useEffect(() => {
-  const store = JSON.parse(localStorage.getItem('favorites')) || []
-  console.log("Loaded from localStorage:", store);
-  setFavorites(store)
-}, [])
+  // Load once on mount
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('favorites')) || []
+    setFavorites(stored)
+    setInitialized(true)
+  }, [])
 
-
-  // call the saveItem
-
-useEffect(() => {
-  localStorage.setItem("favorites", JSON.stringify(favorites))
-}, [favorites])
-
-  const addToFavorites = (place) => {
-
-    console.log("Place received:", place, typeof place);
-    
-    if (!favorites.includes(place)) {
-      setFavorites([...favorites, place]);
+  // Save when favorites change (after initial load)
+  useEffect(() => {
+    if (initialized) {
+      localStorage.setItem('favorites', JSON.stringify(favorites))
     }
-    setShowFavorites(false)
-  };
+  }, [favorites, initialized])
 
-  const removeFromFavorites = (place) => {
-    setFavorites(favorites.filter(fav => fav !== place))
-    console.log(favorites)
+// ✅ Add new favorite (unique by lat & lon)
+const addToFavorites = (town, country, lat, lon) => {
+  const exists = favorites.some(fav => fav.lat === lat && fav.lon === lon)
+
+  if (!exists) {
+    const newFav = { town, country, lat, lon }
+    setFavorites(prev => [...prev, newFav])
+    console.log('✅ Added favorite:', newFav)
+  } else {
+    console.log('⚠️ Already in favorites:', town, lat, lon)
   }
 
-  console.log(favorites)
+  setShowFavorites(false)
+}
+
+// ✅ Remove by lat & lon (more reliable than place name)
+const removeFromFavorites = (lat, lon) => {
+  setFavorites(prev => prev.filter(fav => fav.lat !== lat || fav.lon !== lon))
+  console.log('🗑️ Removed favorite with coordinates:', lat, lon)
+}
 
 
   return (
-    <FavoritesContext.Provider value={{favorites, setFavorites, addToFavorites, removeFromFavorites, setShowFavorites, showFavorites}}>
+    <FavoritesContext.Provider value={{
+      favorites,
+      addToFavorites,
+      removeFromFavorites,
+      showFavorites,
+      setShowFavorites
+    }}>
       {children}
     </FavoritesContext.Provider>
   )

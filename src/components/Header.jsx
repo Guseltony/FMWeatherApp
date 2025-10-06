@@ -47,8 +47,8 @@ const Header = () => {
         </div>
 
         {/* units */}
-        <button className={`${ error || isLoading ? 'cursor-not-allowed pointer-events-none' : '' } ${isDay ? 'bg-neutral-0 text-black' : 'bg-neutral-800 text-neutral-0'} relative px-10 py-8 md:px-16 md:py-12  rounded-8 focus:outline-2 focus:outline-neutral-0 focus:outline-offset-2 cursor-pointer`} onClick={() => setShowDropDownUnits(prev => !prev)} ref={wrapperRef}>
-          <div className='flex items-center gap-6 md:gap-10 select-none ' >
+        <button className={`${ error || isLoading ? 'cursor-not-allowed pointer-events-none' : '' } ${isDay ? 'bg-Lmode-bg text-Lmode-text' : 'bg-Nmode-bg text-Nmode-text'} relative px-10 py-8 md:px-16 md:py-12  rounded-8 focus:outline-2 focus:outline-neutral-0 focus:outline-offset-2`} onClick={() => setShowDropDownUnits(prev => !prev)} ref={wrapperRef}>
+          <div className='flex items-center gap-6 md:gap-10 select-none cursor-pointer' >
             <img src="/src/assets/images/icon-units.svg" alt=""  className={`${isDay ? 'filter invert' : ''}`}/>
             <p className='text-preset-7 font-medium capitalize'>units</p>
             <img src='/src/assets/images/icon-dropdown.svg' alt="" className={`${isDay ? 'filter invert' : ''}`}/>
@@ -57,9 +57,9 @@ const Header = () => {
           {/* dropdown */}
           {
             showDropDownUnits && 
-              <div className={`px-8 py-6 ${isDay ? 'bg-neutral-0 text-black' : 'bg-neutral-800 text-neutral-0'} border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-[52px] flex-col z-[30]`}>
-                <div className='px-8 py-10 rounded-8 hover:bg-neutral-700 select-none cursor-pointer focus:outline-1 focus:outline-neutral-0 focus:outline-offset-2' onClick={() => handleSetMetric()}>
-                  <p className={`text-preset-7 font-medium ${isDay ? 'text-black' : 'text-neutral-0'} w-fit`}>{ metric ? 'Switch to Imperial' : 'Switch to Metric'}</p>
+              <div className={`px-8 py-6 ${isDay ? 'bg-Lmode-bg text-Lmode-text' : 'bg-Nmode-bg text-Nmode-text'} border-1 border-neutral-600 flex gap-4 rounded-12 h-[412px] w-[214px] absolute right-0 top-[52px] flex-col z-[30]`}>
+                <div className={`px-8 py-10 rounded-8 ${isDay ? 'hover:bg-[#d9d9d9]' : 'hover:bg-neutral-700' } select-none cursor-pointer focus:outline-1 focus:outline-neutral-0 focus:outline-offset-2`} onClick={() => handleSetMetric()}>
+                  <p className={`text-preset-7 font-medium ${isDay ? 'text-Lmode-text' : 'text-Nmode-text'} w-fit`}>{ metric ? 'Switch to Imperial' : 'Switch to Metric'}</p>
                 </div>
 
                 <div className='divide-y-[1px] divide-neutral-600'>

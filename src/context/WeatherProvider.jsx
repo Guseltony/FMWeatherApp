@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGeoLoc } from "../api/weather";
-import { useFavorites, WeatherContext } from "./weatherContext";
+import { WeatherContext } from "./weatherContext";
 
 export const WeatherProvider = ({children}) => {
 
@@ -27,40 +26,30 @@ export const WeatherProvider = ({children}) => {
   const [showCompare, setShowCompare] = useState(false)
   const [reload, setReload] = useState(false)
   const [showMore, setShowMore] = useState(false)
-    const [daysList, setDaysList] = useState([])
-    const [selectedDay, setSelectedDay] = useState()
+  const [daysList, setDaysList] = useState([])
+  const [selectedDay, setSelectedDay] = useState()
   const [isDay, setIsDay] = useState()
+  const [allSet, setAllSet] = useState(false)
+  const [ day, setDay] = useState()
+  const [ index, setIndex] = useState(0)
   
-
-  const { setShowFavorites } = useFavorites()
   
 
   const dayArray = ['Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   const monthArray = ['Jan','Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
 
-  const day = dayArray[todayDate?.getDay()]
-  const date = todayDate?.getDate()
-  const month = monthArray[todayDate?.getMonth()]
-  const year = todayDate?.getFullYear()
-  const hour = todayDate?.getHours()
-  const town = location?.town
-  const country = location?.country
 
-  const fullDate = `${day}, ${month} ${date}, ${year}`
-  const fullLocation = `${town}, ${country}`
-
-
-  
   useEffect(() => {
-    if (current && hourly && daily) {
+    if (current && hourly && daily && allSet) {
       setIsLoading(false)
     } else setIsLoading(true)
 
-  }, [current, daily, hourly])
+  }, [current, daily, hourly, allSet])
+
+  // useEffect for automatic location and wetaher fetching
 
     useEffect(() => {
       if (!navigator.geolocation) {
-        // setError("Geolocation not supported");
         setError(true)
         return;
       }
@@ -73,19 +62,11 @@ export const WeatherProvider = ({children}) => {
 
         try {
           // Weather API with user's lat/lon
-          const weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`
-          );
-          const weatherData = await weatherRes.json();
-
-          // Reverse geocoding with BigDataCloud (no CORS issue)
           const nameRes = await fetch(
             `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
           );
           const placeData = await nameRes?.json();
-
-          console.log("Weather:", weatherData);
-          console.log("Place:", placeData);
+          
           setLocation({
             town: placeData.city,
             country: placeData.countryName
@@ -106,32 +87,8 @@ export const WeatherProvider = ({children}) => {
       navigator.geolocation.getCurrentPosition(success, failure);
     }, [reload]);
 
-
-  useEffect(() => {
-    if (!place) return
-    const getGeoLocation = async () => {
-      try {
-        const locationDetails = await getGeoLoc(place)
-        setGeoCode({ lat: locationDetails.lat, lon: locationDetails.lon })
-        setLocation({ town: locationDetails?.geoLoc.name, country: locationDetails?.geoLoc.country })
-
-        localStorage.setItem("place", place)
-        // setSearching(false)
-        console.log('geoooo:', locationDetails?.geoLoc)
-        setShowFavorites(false)
-
-      } catch (error) {
-      setError(true)
-      console.log(error)
-        
-    }
-  }
-
-    getGeoLocation()
-  }, [place])
-
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, day, date, month, year, setTodayDate, todayDate, hour, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily,fullDate, fullLocation, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, setTodayDate, todayDate, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay, allSet, setAllSet,  day, setDay, index, setIndex }}>
       {children}
     </WeatherContext.Provider>
   );

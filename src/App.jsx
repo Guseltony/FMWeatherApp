@@ -10,7 +10,7 @@ import { useWeather } from "./context/weatherContext"
 
 function App() {
 
-  const {error, showCompare} = useWeather()
+  const {error, showCompare, isDay} = useWeather()
 
 
   //   useEffect(() => {
@@ -31,7 +31,7 @@ function App() {
 
   return (
     <>
-      <div className="bg-neutral-900 px-16 md:px-24 lg:px-112 pt-16 pb-48 md:pt-24 md:pb-80 lg:pt-48 lg:pb-80 min-w-screen min-h-[100dvh] relative">
+      <div className={` ${isDay ? 'bg-gradient-to-b from-[#93c5fd] to-[#3b82f6]' : 'bg-neutral-900' } px-16 md:px-24 lg:px-112 pt-16 pb-48 md:pt-24 md:pb-80 lg:pt-48 lg:pb-80 min-w-screen min-h-[100dvh] relative`}>
         <div className="relative">
           <Header />
           {

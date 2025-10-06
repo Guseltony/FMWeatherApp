@@ -5,7 +5,7 @@ import { getWeatherIcons } from '../assets/weatherIcons'
 
 export const DailyForecast = () => {
 
-  const { lat, lon, metric, setError, isLoading, setDaily, setDaysList, isDay } = useWeather()
+  const { lat, lon, metric, setError, isLoading, allSet, setDaily, setDaysList, isDay } = useWeather()
   const [data, setData] = useState([])
 
 
@@ -29,7 +29,7 @@ export const DailyForecast = () => {
       fetchWeatherData()
     }, [lat, lon, metric])
 
-  if (isLoading) return (
+  if (isLoading || !allSet) return (
   <div>
         {
               <div className='flex flex-col gap-20 items-start'>
@@ -62,20 +62,20 @@ export const DailyForecast = () => {
   return (
     <div>
       {
-        lat && lon && data &&
+        lat && lon && data && allSet &&
           <div className='flex flex-col gap-20 items-start'>
-                <p className='text-preset-5a'>Daily forecast</p>
+                <p className={`${isDay ? 'text-[#000]' : 'text-Nmode-text'} text-preset-5a`}>Daily forecast</p>
 
                 <div className='grid grid-cols-3 md:grid-cols-7 gap-16 w-[100%]'>
 
                   {
                     data.map((d, index) => 
-                    <div className={`flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 ${isDay ? 'bg-neutral-0 text-black' : 'bg-neutral-800 text-neutral-0'} border-neutral-600 flex-1`} key={index}>
-                    <p className='text-preset-6'>{d.day}</p>
+                    <div className={`flex flex-col items-center justify-center rounded-12 gap-16 px-10 py-16 ${isDay ? 'bg-Lmode-bg text-Lmode-light' : 'bg-Nmode-bg text-Nmode-text'} border-neutral-600 flex-1`} key={index}>
+                    <p className={`${isDay ? 'text-Lmode-text' : 'text-Nmode-text'} text-preset-6`}>{d.day}</p>
                     <img src={getWeatherIcons(d.code)} alt="" className={`${isDay ? 'filter invert' : ''} w-[60px] h-[60px]`} />
                     <div className='flex items-center justify-between w-full'>
-                      <p className={`text-preset-7 ${isDay ? '' : 'text-neutral-0'}`}>{Math.round( d.max)}°</p>
-                      <p className={`text-preset-7 ${isDay ? '' : 'text-neutral-0'}`}>{Math.round( d.min)}°</p>
+                      <p className={`text-preset-7 ${isDay ? 'text-Lmode-text' : 'text-neutral-0'}`}>{Math.round( d.max)}°</p>
+                      <p className={`text-preset-7 ${isDay ? 'text-Lmode-text' : 'text-neutral-0'}`}>{Math.round( d.min)}°</p>
                     </div>
                   </div>
                     )
