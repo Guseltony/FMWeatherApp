@@ -76,6 +76,7 @@ export const WeatherProvider = ({children}) => {
           setPlace(placeData.city)
 
         } catch (err) {
+          setErrorMessage('Location not detected')
           console.log(err)
         }
       };
