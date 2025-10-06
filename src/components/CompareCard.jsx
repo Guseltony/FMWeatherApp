@@ -3,7 +3,7 @@
 import { WiHumidity } from "react-icons/wi"
 import { AiTwotoneDelete } from "react-icons/ai"
 import { LuWind } from "react-icons/lu"
-// import { motion } from "framer-motion"
+import { motion as Motion } from "framer-motion"
 
 
 export const CompareCard = ({
@@ -20,7 +20,7 @@ export const CompareCard = ({
 }) => {
  
   return (
-    <motion.div
+    <Motion.div
       whileHover={{ scale: 1.03 }}
       transition={{ duration: 0.3 }}
       className='relative bg-gradient-to-b from-neutral-800/80 to-neutral-900/80 backdrop-blur-md 
@@ -81,6 +81,6 @@ export const CompareCard = ({
           </p>
         </div>
       </div>
-    </motion.div>
+    </Motion.div>
   )
 }

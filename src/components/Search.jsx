@@ -6,7 +6,7 @@ import { LuAudioWaveform } from "react-icons/lu";
 import { getGeoLoc } from "../api/weather";
 
 export const Search = () => {
-  const { setPlace, searching, setSearching, setIsLoading, setGeoCode, setLocation, setError, isLoading } = useWeather();
+  const { setPlace, searching, setSearching, setIsLoading, setGeoCode, setLocation, setError, isLoading, setErrorMessage, errorMessage } = useWeather();
   const { favorites, showFavorites, setShowFavorites, removeFromFavorites } = useFavorites();
 
   const [value, setValue] = useState("");
@@ -49,6 +49,12 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
     useEffect(() => {
     if(isLoading && searching) {setShowSearch(false)} else setShowSearch(true)
   }, [isLoading, searching])
+
+  useEffect(() => {
+  if (!errorMessage) return;
+  const timer = setTimeout(() => setErrorMessage(""), 4000);
+  return () => clearTimeout(timer);
+}, [errorMessage]);
   
 
   // fetch all place or city with the value/place name
@@ -70,9 +76,10 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
 
       setShowAllPlace(true)
       setShowSearch(true)
+      setErrorMessage('')
     } catch (error) {
       console.log(error)
-      setError(true)
+      setErrorMessage('Location not found')
     }
   }
 
@@ -159,6 +166,13 @@ const {result, isRecording, startRecording, stopRecording} = useSpeechRecognitio
                   className="animate-spin"
                 />
                 <p className="text-preset-7">Search in progress</p>
+              </div>
+            </div>
+          )}
+          {errorMessage && (
+            <div className="absolute left-0 z-50 px-8 py-8 flex items-center mt-12 bg-neutral-800 rounded-12 w-[100%] h-[55] hover:bg-neutral-700 transition-all duration-200 ease-in">
+              <div className="px-8 py-10 flex gap-10 rounded-8">
+                <p className="text-preset-7">{errorMessage}</p>
               </div>
             </div>
           )}

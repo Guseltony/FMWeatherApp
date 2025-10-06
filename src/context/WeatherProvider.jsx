@@ -32,7 +32,8 @@ export const WeatherProvider = ({children}) => {
   const [allSet, setAllSet] = useState(false)
   const [ day, setDay] = useState()
   const [ index, setIndex] = useState(0)
-  const [ hour, setHour] = useState()
+  const [hour, setHour] = useState()
+  const [errorMessage, setErrorMessage] = useState('')
   
   
 
@@ -75,21 +76,26 @@ export const WeatherProvider = ({children}) => {
           setPlace(placeData.city)
 
         } catch (err) {
-          setError(true)
           console.log(err)
         }
       };
 
       const failure = (err) => {
-        setError(true)
-        console.log("Geolocation error:", err);
+        if (err.code === 1) {
+          setSearching(false)
+          setErrorMessage("Location not detected. Showing London by default.");
+          setGeoCode({ lat: 51.5072, lon: -0.1276 });
+          setPlace("London");
+          setLocation({ town: "London", country: "United Kingdom" });
+        }
       };
+
 
       navigator.geolocation.getCurrentPosition(success, failure);
     }, [reload]);
 
   return (
-    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, setTodayDate, todayDate, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay, allSet, setAllSet,  day, setDay, index, setIndex, hour, setHour }}>
+    <WeatherContext.Provider value={{ lat:geoCode.lat, lon:geoCode.lon, town: location.town, country: location.country, setLocation, error, setError, reload, setReload, dayArray, monthArray, setTodayDate, todayDate, place, setPlace, setGeoCode, setMetric, metric, searching, setSearching, isLoading, setIsLoading, setCurrent, setHourly, setDaily, showCompare, setShowCompare, showMore, setShowMore,   daysList, setDaysList, selectedDay, setSelectedDay, isDay, setIsDay, allSet, setAllSet,  day, setDay, index, setIndex, hour, setHour, errorMessage, setErrorMessage }}>
       {children}
     </WeatherContext.Provider>
   );
