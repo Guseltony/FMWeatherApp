@@ -9,7 +9,7 @@ import { LuSunrise, LuSunset } from "react-icons/lu";
 
 export const CurrentWeather = () => {
 
-  const { lat, lon, metric, setTodayDate, isLoading, setError, setCurrent, setSearching, dayArray, monthArray, town, country, setAllSet, selectedDay, searching, setSelectedDay, isDay, setIsDay, setDay, setHour, todayDate } = useWeather()
+  const { lat, lon, metric, setTodayDate, isLoading, setError, setCurrent, setSearching, dayArray, monthArray, town, country, setAllSet, selectedDay, searching, setSelectedDay, isDay, setIsDay, setDay, setHour } = useWeather()
 
   const {favorites, removeFromFavorites, addToFavorites} = useFavorites()
 
