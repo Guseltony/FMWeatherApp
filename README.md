@@ -50,8 +50,8 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://tonywx.vercel.app)
+- Solution URL: (https://www.frontendmentor.io/solutions/weather-forecast-app-using-open-meteo-api-react-hooks-and-tailwind-css-fkvXsAwlk0)
+- Live Site URL: (https://tonywx.vercel.app)
 
 ## My process
 
