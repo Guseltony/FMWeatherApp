@@ -9,7 +9,11 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["icons/icon-192x192.png", "icons/icon-512x512.png"],
+      includeAssets: [
+        "offline.html", // 👈 ADD THIS BACK
+        "icons/icon-192x192.png",
+        "icons/icon-512x512.png",
+      ],
       manifest: {
         name: "Weather App",
         short_name: "WeatherApp",
@@ -36,21 +40,21 @@ export default defineConfig({
             src: "screenshots/mobile.png",
             sizes: "375x666",
             type: "image/png",
-            form_factor: "narrow", // 👈 indicates mobile
+            form_factor: "narrow",
             label: "Mobile view of Weather App",
           },
           {
             src: "screenshots/desktop.png",
             sizes: "1912x984",
             type: "image/png",
-            form_factor: "wide", // 👈 indicates desktop
+            form_factor: "wide",
             label: "Desktop view of Weather App",
           },
         ],
       },
       workbox: {
         navigateFallback: "/offline.html",
-        globPatterns: ["**/*.{js,css,html,png,svg,ico}"], // 👈 ensures offline.html is cached
+        globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.open-meteo\.com\/.*/i,
